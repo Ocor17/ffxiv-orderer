@@ -5,9 +5,15 @@ body {
   font-family: "Noto Sans JP", sans-serif; /* Use Noto Sans Japanese font */
   background-color: #121212;
   color: #ffffff;
+  
+}
+
+.body-style {
+  padding-left: 3%;
 }
 
 .orderList{
+  
   padding: 10px 24px;
   font-size: 12px;
   text-transform: uppercase;

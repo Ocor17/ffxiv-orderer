@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { database } from "../Firebase";
 
@@ -9,6 +9,30 @@ const OrderDetail = (props) =>{
 
   const date = new Date(props.order.date).toDateString();
   const [status, setStatus] = useState(props.order.current_status); 
+  //keeps orderer from being pinged on page load when status is already delivered.
+  const[originalStatus, setOriginalStatus] = useState(props.order.current_status);
+
+  const webhookMessage = async(webhookURL, message) => {
+
+    try{
+      const response = await fetch(webhookURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: message,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+        }
+    catch (error) {
+      console.error(error);
+    }
+
+  }; 
 
   console.log("Formatted Date",date);
 
@@ -20,8 +44,33 @@ const OrderDetail = (props) =>{
     archived:"archived",
   };
 
+    useEffect(() => {
+      const updateOrder = async () =>{
+      console.log("Status", status)
+      const orderRef = doc(database, "orders", props.order.id);
+      await updateDoc(orderRef,{
+        current_status:status
+      });
+      }
+
+      const pingOrderer = async () =>{
+        if(status==='delivered' && originalStatus!=='delivered'){
+          const webhookURL = String(process.env.REACT_APP_WEBHOOK_URL)
+          //console.log("WEBHOOK URL",webhookURL)
+          //console.log("ORDERER DISCORD",props.order.orderer);
+          const message = `<@${props.order.orderer_discord}> an order has been delivered`  
+          //console.log("MESSAGE",message)
+          webhookMessage(webhookURL, String(message))
+        }
+      }
+
+      updateOrder();
+      pingOrderer();
+      setOriginalStatus(status);
+    }, [status, originalStatus,props])
+
     //Change to UseEffect
-    const handleStatusChange = async (event) => {
+/*     const handleStatusChange = async (event) => {
       console.log("ID", props.order.id)
       const orderRef = doc(database, "orders", props.order.id);
       console.log("ORDERREF:",orderRef);
@@ -29,7 +78,7 @@ const OrderDetail = (props) =>{
         current_status:event
       });
       console.log("Changed!", event);
-    }
+    } */
   
     return (
       <div>
@@ -56,7 +105,7 @@ const OrderDetail = (props) =>{
             onChange={
               (e) => {
                 setStatus(e.target.value)
-                handleStatusChange(e.target.value)
+                //handleStatusChange(e.target.value)
               }}
           >
             {Object.keys(STATUS_CHOICES).map((key) => (

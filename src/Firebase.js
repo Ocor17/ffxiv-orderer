@@ -2,8 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {getFirestore} from 'firebase/firestore';
-import {getAuth} from 'firebase/auth';
-
+import { getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
 
 
 
@@ -30,5 +29,7 @@ export const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-export const auth = getAuth(app);
+const auth = getAuth(app);
+setPersistence(auth, browserSessionPersistence);
+export {auth};
 export const database = getFirestore(app);

@@ -18,7 +18,9 @@ const Forgot = () => {
 
         sendPasswordResetEmail(auth, email)
         .then(() => {
+            alert("Password reset email sent!");
             navigate("/signin", {replace:true});
+            
         })
         .catch((error) => {
             const errorCode = error.code;

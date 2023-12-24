@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import{auth} from '../../Firebase'
+import { addUser } from "../Firestore";
+import {auth} from '../../Firebase'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import {Link, useNavigate} from 'react-router-dom';
 import '../../css/SignIn.css';
@@ -11,6 +12,8 @@ const SignUp = () => {
     const[email, setEmail] = useState('');
     const[password, setPassword]=useState('');
     const[passwordReenter, setPasswordReenter]=useState('');
+    const[discord, setDiscord]=useState('');
+
 
 
     const signUp = (e) =>{
@@ -20,6 +23,8 @@ const SignUp = () => {
         e.preventDefault();
         createUserWithEmailAndPassword(auth,email,password).then((userCredential)=>{
             console.log(userCredential);
+            addUser(userCredential.user.uid, discord);
+            alert("Sign Up Successful");
             navigate("/signin",{replace: true});
         }).catch((error) =>{
             console.log(error);
@@ -52,6 +57,14 @@ const SignUp = () => {
                     value={passwordReenter} 
                     onChange={(e) => setPasswordReenter(e.target.value)}
                 ></input>
+                <input 
+                className="un" 
+                type="text" 
+                placeholder="Enter your discord username" 
+                value={discord}
+                onChange={(e) => setDiscord(e.target.value)}
+                ></input>
+
 
                 <button className="submit" type="submit">Sign Up</button>
             </form>

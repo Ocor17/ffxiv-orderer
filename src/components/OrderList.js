@@ -5,32 +5,23 @@ import { getOrders } from "./Firestore";
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
 
+
   useEffect(() => {
-    let isMounted = true;
 
     const fetchData = async () => {
       try {
         const result = await getOrders();
 
-        if (isMounted) {
-          setOrders(result);
-        }
+        setOrders(result);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
-
     fetchData();
-
-    return () => {
-      isMounted = false;
-    };
   }, []); 
 
-  console.log(orders);
-
   return (
-    <div>
+    <div >
       <h2 >Available Orders</h2>
       {orders.length > 0 ? (
         <ul>

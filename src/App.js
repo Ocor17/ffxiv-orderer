@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {BrowserRouter, Routes, Route, Navigate, useLocation} from 'react-router-dom';
 import OrderDetailPage from './pages/OrderDetailPage'
 import HomePage from './pages/Home';
@@ -8,6 +8,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Forgot from './pages/Forgot';
 import {auth} from './Firebase';
+import { getUser } from './components/Firestore';
 
 const CRAFTED_BIS ={
   "MNK":"Mzk2NjAsbnVsbCwxOzM5NjYxLG51bGwsMTszOTY2MixudWxsLDE7Mzk2NjMsbnVsbCwxOzM5NjY0LG51bGwsMTszOTY4NixudWxsLDE7Mzk2OTEsbnVsbCwxOzM5Njk2LG51bGwsMTszOTcwMSxudWxsLDI7Mzk2MzEsbnVsbCwx",
@@ -33,15 +34,41 @@ const CRAFTED_BIS ={
 
 const BASE_URL = "https://ffxivteamcraft.com/import/";
 
+
 function RequireAuth({children}){
   
   const location = useLocation();
-  
-  //console.log("USER::::: ",auth.currentUser)
+  const [userActive, setUserActive] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if(!auth.currentUser){
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userActiveData = await getUser(auth.currentUser.uid);
+        setUserActive(userActiveData.active);
+        //console.log("USERDATA",userActiveData)
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        setUserActive(null);
+      } finally{
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  //console.log("USER ACTIVE:",userActive);
+
+  if (loading){
+    return null;
+
+  }
+
+  if (!auth.currentUser || !userActive) {
     return <Navigate to="/signin" state={{ from: location }} replace />;
   }
+
 
   return children;
 }
@@ -52,35 +79,31 @@ function App() {
 
   
   return (
+
+    <><head><title>FFxiv inventory</title></head>
     <div>
       <BrowserRouter>
-      <Routes>
-      <Route index element={
-      <RequireAuth>
-      <HomePage/>
-      </RequireAuth>
-      } />
-      <Route path="/home" element={
-      <RequireAuth>
-      <HomePage/>
-      </RequireAuth>
-      } />
-      <Route path="/orders/:orderId" element={
-      <RequireAuth>
-      <OrderDetailPage/>
-      </RequireAuth>
-      }/>
-      <Route path="/signin" element={<SignIn/>}/>
-      <Route path="/signup" element={<SignUp/>}/>
-      <Route path="/forgot" element={<Forgot/>}/>      
-      <Route path="*" element={<ErrorPage/>}/>
-      {/*       
-      <Route path="/profile" element={<ProfilePage/>} />
-      <Route path="/admin" element={<Admin/>} />
-      */}
-      </Routes>
+        <Routes>
+          <Route index element={<RequireAuth>
+            <HomePage />
+          </RequireAuth>} />
+          <Route path="/home" element={<RequireAuth>
+            <HomePage />
+          </RequireAuth>} />
+          <Route path="/orders/:orderId" element={<RequireAuth>
+            <OrderDetailPage />
+          </RequireAuth>} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot" element={<Forgot />} />
+          <Route path="*" element={<ErrorPage />} />
+          {/*
+    <Route path="/profile" element={<ProfilePage/>} />
+    <Route path="/admin" element={<Admin/>} />
+    */}
+        </Routes>
       </BrowserRouter>
-    </div>
+    </div></>
   );
 }
 

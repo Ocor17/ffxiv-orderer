@@ -1,8 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import{auth} from '../../Firebase'
 import {useNavigate,Link} from 'react-router-dom';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import '../../css/SignIn.css';
+import { getUser } from "../Firestore";
 
 const SignIn = () => {
 
@@ -11,11 +12,34 @@ const SignIn = () => {
     const[email, setEmail] = useState('');
     const[password, setPassword]=useState('');
 
+
+    useEffect(() => {
+        // Check if the user is already authenticated, redirect to home if true
+        if (auth.currentUser) {
+          console.log('User is already authenticated. Redirecting to home.');
+        
+          const fetchData = async () => {
+
+          const active_user = await getUser(auth.currentUser.uid);
+          console.log("Active User",active_user);
+
+          if(active_user.active === true){
+            navigate("/", {replace:true});
+          }
+        }
+        fetchData();
+          
+        }
+        //console.log("Effect called" );
+        //console.log(auth.currentUser);
+      }, []);
+    
+
     const signIn = (e) =>{
 
         e.preventDefault();
-        signInWithEmailAndPassword(auth,email,password).then((userCredential)=>{
-            console.log(userCredential);
+        signInWithEmailAndPassword(auth,email,password).then(()=>{
+
             navigate("/", {replace:true});
         }).catch((error) =>{
             console.log(error);
