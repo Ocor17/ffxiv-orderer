@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import{auth} from '../../Firebase'
 import {useNavigate,Link} from 'react-router-dom';
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword} from "firebase/auth";
 import '../../css/SignIn.css';
 import { getUser } from "../Firestore";
 
@@ -32,7 +32,7 @@ const SignIn = () => {
         }
         //console.log("Effect called" );
         //console.log(auth.currentUser);
-      }, []);
+      }, [navigate]);
     
 
     const signIn = (e) =>{
