@@ -54,7 +54,4 @@ jobs:
         firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FFXIV_INVENTORY }}'
         channelId: live
         projectId: ffxiv-inventory
-    - name: Debug Environment Variables
-      run: |
-        echo "APIKEY: ${{ secrets.REACT_APP_APIKEY }}"
-        echo "AUTHDOMAIN: ${{ secrets.REACT_APP_AUTHDOMAIN }}"
+
