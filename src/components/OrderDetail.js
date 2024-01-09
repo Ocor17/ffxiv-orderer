@@ -86,16 +86,16 @@ const OrderDetail = (props) =>{
         {props.order ? (
           <div>
             <p>
-              <strong>Request:</strong> {props.order.orderer}
+              <strong>Requestor:</strong> {props.order.orderer}
             </p>
             <p>
               <strong>order date: </strong>{date}
             </p>
             <p>
-              <strong>Requestor: </strong>{props.order.crafter}
+              <strong>Crafter: </strong>{props.order.crafter}
             </p>
             <p>
-              <strong>Current status:</strong> 
+              <strong>Current status: {status}</strong> 
             </p>
 
           <label htmlFor="statusDropdown"> Change Status:</label>
