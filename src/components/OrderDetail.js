@@ -44,12 +44,14 @@ const OrderDetail = (props) =>{
     archived:"archived",
   };
 
+    //Add checks so Crafter doesn't get overwritten
     useEffect(() => {
       const updateOrder = async () =>{
       console.log("Status", status)
       const orderRef = doc(database, "orders", props.order.id);
       await updateDoc(orderRef,{
         current_status:status
+        
       });
       }
 

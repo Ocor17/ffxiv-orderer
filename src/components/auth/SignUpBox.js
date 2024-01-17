@@ -12,7 +12,7 @@ const SignUp = () => {
     const[email, setEmail] = useState('');
     const[password, setPassword]=useState('');
     const[passwordReenter, setPasswordReenter]=useState('');
-    const[discord, setDiscord]=useState('');
+    const[discordCode, setDiscordCode]=useState('');
 
 
 
@@ -20,15 +20,15 @@ const SignUp = () => {
 
         if(password === passwordReenter){
 
-        e.preventDefault();
-        createUserWithEmailAndPassword(auth,email,password).then((userCredential)=>{
-            console.log(userCredential);
-            addUser(userCredential.user.uid, discord);
-            alert("Sign Up Successful");
-            navigate("/signin",{replace: true});
-        }).catch((error) =>{
-            console.log(error);
-        });
+            e.preventDefault();
+            createUserWithEmailAndPassword(auth,email,password).then(async (userCredential)=>{
+                console.log(userCredential);
+                await addUser(userCredential.user.uid, discordCode);
+                alert("Sign Up Successful");
+                navigate("/signin",{replace: true});
+            }).catch((error) =>{
+                console.log(error);
+            });
         }
     }
 
@@ -60,9 +60,9 @@ const SignUp = () => {
                 <input 
                 className="un" 
                 type="text" 
-                placeholder="Enter your discord username" 
-                value={discord}
-                onChange={(e) => setDiscord(e.target.value)}
+                placeholder="Enter your discord registration key" 
+                value={discordCode}
+                onChange={(e) => setDiscordCode(e.target.value)}
                 ></input>
 
 
