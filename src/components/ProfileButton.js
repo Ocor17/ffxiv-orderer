@@ -1,6 +1,6 @@
 // ProfileButton.js
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const ProfileButton = ({ user }) => {
   // Customize the rendering based on your design and user information

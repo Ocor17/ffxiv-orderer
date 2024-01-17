@@ -1,14 +1,13 @@
 import ForgotBox from "../components/auth/ForgotBox";
 
-function ForgotPage(){
-
-    return(
+function ForgotPage() {
+  return (
     <>
-        <div>
-            <ForgotBox/>
-        </div>
+      <div>
+        <ForgotBox />
+      </div>
     </>
-    );
+  );
 }
 
 export default ForgotPage;

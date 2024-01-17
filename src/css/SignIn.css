@@ -16,22 +16,22 @@
 }
 
 .un {
-width: 76%;
-color: rgb(38, 50, 56);
-font-weight: 700;
-font-size: 14px;
-letter-spacing: 1px;
-background: rgba(255, 249, 249, 0.979);
-padding: 10px 20px;
-border: none;
-border-radius: 20px;
-outline: none;
-box-sizing: border-box;
-border: 2px solid rgba(0, 0, 0, 0.02);
-margin-bottom: 50px;
-margin-left: 46px;
-text-align: center;
-margin-bottom: 27px;
+  width: 76%;
+  color: rgb(38, 50, 56);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  background: rgba(255, 249, 249, 0.979);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  box-sizing: border-box;
+  border: 2px solid rgba(0, 0, 0, 0.02);
+  margin-bottom: 50px;
+  margin-left: 46px;
+  text-align: center;
+  margin-bottom: 27px;
 }
 
 form.form1 {
@@ -39,32 +39,31 @@ form.form1 {
 }
 
 .pass {
-      width: 76%;
-color: rgb(38, 50, 56);
-font-weight: 700;
-font-size: 14px;
-letter-spacing: 1px;
-background: rgba(255, 249, 249, 0.979);
-padding: 10px 20px;
-border: none;
-border-radius: 20px;
-outline: none;
-box-sizing: border-box;
-border: 2px solid rgba(0, 0, 0, 0.02);
-margin-bottom: 50px;
-margin-left: 46px;
-text-align: center;
-margin-bottom: 27px;
+  width: 76%;
+  color: rgb(38, 50, 56);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1px;
+  background: rgba(255, 249, 249, 0.979);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  box-sizing: border-box;
+  border: 2px solid rgba(0, 0, 0, 0.02);
+  margin-bottom: 50px;
+  margin-left: 46px;
+  text-align: center;
+  margin-bottom: 27px;
 }
 
-
-.un:focus, .pass:focus {
+.un:focus,
+.pass:focus {
   border: 2px solid rgba(0, 0, 0, 0.18) !important;
-  
 }
 
 .submit {
-cursor: pointer;
+  cursor: pointer;
   border-radius: 5em;
   color: #fff;
   background: linear-gradient(to right, #5e52c5, #5135ce);
@@ -87,12 +86,11 @@ cursor: pointer;
 a {
   text-shadow: 0px 0px 3px rgba(117, 117, 117, 0.12);
   color: #381abe;
-  text-decoration: none
+  text-decoration: none;
 }
 
 @media (max-width: 600px) {
   .main {
-      border-radius: 0px;
+    border-radius: 0px;
   }
-  
 }

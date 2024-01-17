@@ -1,8 +1,8 @@
 // src/Routes.js
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import OrderList from './components/OrderList';
-import OrderDetailPage from './pages/OrderDetailPage';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import OrderList from "./components/OrderList";
+import OrderDetailPage from "./pages/OrderDetailPage";
 
 const AppRoutes = () => {
   return (

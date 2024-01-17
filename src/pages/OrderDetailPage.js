@@ -1,37 +1,33 @@
 import React from "react";
 import TopNavBar from "../components/TopNavBar";
-import {Link, useLocation} from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 import OrderDetail from "../components/OrderDetail";
 //import{auth} from '../Firebase'
 
+const OrderDetailPage = () => {
+  //console.log("USER", auth.currentUser);
 
-const OrderDetailPage = () =>{
+  //const {id} = useParams();
+  const location = useLocation();
 
-    //console.log("USER", auth.currentUser);
+  const { curr_order } = location.state || {};
 
-    //const {id} = useParams();
-    const location = useLocation();
-
-    const {curr_order } = location.state || {};
-
-
-    return(
+  return (
     <>
-        <TopNavBar/>
-        <h2 className="body-style">
-            <Link to="/" className="button">Back</Link>
-        </h2>
+      <TopNavBar />
+      <h2 className="body-style">
+        <Link to="/" className="button">
+          Back
+        </Link>
+      </h2>
 
-        
-
-        <div className="body-style">
-            <OrderDetail order={curr_order} />
-        </div>
+      <div className="body-style">
+        <OrderDetail order={curr_order} />
+      </div>
     </>
-    );
-}
+  );
+};
 
 export default OrderDetailPage;
-
 
 //<OrderDetail orderId={orderId}/>

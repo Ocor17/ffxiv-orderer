@@ -1,19 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap");
 
 /* Global Styles */
 body {
   font-family: "Noto Sans JP", sans-serif; /* Use Noto Sans Japanese font */
   background-color: #121212;
   color: #ffffff;
-  
 }
 
 .body-style {
   padding-left: 3%;
 }
 
-.orderList{
-  
+.orderList {
   padding: 10px 24px;
   font-size: 12px;
   text-transform: uppercase;
@@ -30,17 +28,17 @@ body {
   text-decoration: none;
 }
 
-.orderList:hover{
+.orderList:hover {
   background-color: #4123c4;
   box-shadow: 0px 15px 20px rgba(73, 46, 229, 0.4);
   color: #fff;
   transform: translateY(-7px);
 }
 
-.orderSpace{
+.orderSpace {
   padding: auto;
   margin: 20px 0px;
-  list-style: none
+  list-style: none;
 }
 
 .button {
@@ -102,7 +100,6 @@ body {
   background-color: rgb(87, 86, 86);
   -webkit-text-fill-color: white;
   font-size: medium;
-  
 }
 
 .form-label {
@@ -163,7 +160,7 @@ body {
   margin: 0;
 }
 
-.order_detail_notes{
+.order_detail_notes {
   resize: none;
   width: 75%;
   height: 100%;
