@@ -10,7 +10,12 @@ const OrderDetailPage = () => {
   //const {id} = useParams();
   const location = useLocation();
 
-  const { curr_order } = location.state || {};
+  const curr_order = location.state.order || {};
+  const user = location.state.user || {};
+  console.log("STATE", location);
+
+  console.log("ORDER", curr_order);
+  console.log("USER", user);
 
   return (
     <>
@@ -22,7 +27,7 @@ const OrderDetailPage = () => {
       </h2>
 
       <div className="body-style">
-        <OrderDetail order={curr_order} />
+        <OrderDetail order={curr_order} user={user} />
       </div>
     </>
   );

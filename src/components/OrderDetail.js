@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { database } from "../Firebase";
-
+//TODO reflect crafter update on page
 const OrderDetail = (props) => {
-  //console.log(props.order)
+  console.log("PROPS:", props);
 
   const date = new Date(props.order.date).toDateString();
   const [status, setStatus] = useState(props.order.current_status);
+  const [crafter, setCrafter] = useState(props.user);
   //keeps orderer from being pinged on page load when status is already delivered.
   const [originalStatus, setOriginalStatus] = useState(
     props.order.current_status
@@ -32,6 +33,7 @@ const OrderDetail = (props) => {
   };
 
   console.log("Formatted Date", date);
+  console.log(crafter);
 
   const STATUS_CHOICES = {
     ordered: "ordered",
@@ -48,6 +50,7 @@ const OrderDetail = (props) => {
       const orderRef = doc(database, "orders", props.order.id);
       await updateDoc(orderRef, {
         current_status: status,
+        crafter: crafter,
       });
     };
 
@@ -65,7 +68,7 @@ const OrderDetail = (props) => {
     updateOrder();
     pingOrderer();
     setOriginalStatus(status);
-  }, [status, originalStatus, props]);
+  }, [status, originalStatus, props, crafter]);
 
   //Change to UseEffect
   /*     const handleStatusChange = async (event) => {

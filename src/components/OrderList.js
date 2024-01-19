@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getOrders } from "./Firestore";
-
+//TODO Fix location.state is null form back button
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
+  const [user, setUser] = useState({});
+  const location = useLocation();
+  console.log("ORDERLIST LOCATION:", location);
+
+  console.log("ORDERLIST CURRENT USER:", user);
+
+  // Fetch orders from Firestore
 
   useEffect(() => {
     const fetchData = async () => {
@@ -11,12 +18,13 @@ const OrderList = () => {
         const result = await getOrders();
 
         setOrders(result);
+        setUser(location.state.current_user.discord_name || {});
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [location.state.current_user.discord_name]);
 
   return (
     <div>
@@ -28,7 +36,7 @@ const OrderList = () => {
               <Link
                 className="orderList"
                 to={`/orders/${order.id}`}
-                state={{ curr_order: order }}
+                state={{ order, user }}
               >
                 {order.orderer} - {order.current_status}
               </Link>

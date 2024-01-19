@@ -18,10 +18,14 @@ const SignIn = () => {
 
       const fetchData = async () => {
         const active_user = await getUser(auth.currentUser.uid);
-        console.log("Active User", active_user);
+        console.log("Active User", active_user.displayName);
 
         if (active_user.active === true) {
-          navigate("/", { replace: true });
+          navigate(
+            "/",
+            { replace: true },
+            { state: { current_user: active_user } }
+          );
         }
       };
       fetchData();
@@ -33,8 +37,9 @@ const SignIn = () => {
   const signIn = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        navigate("/", { replace: true });
+      .then(async () => {
+        const active_user = await getUser(auth.currentUser.uid);
+        navigate("/", { replace: true, state: { current_user: active_user } });
       })
       .catch((error) => {
         console.log(error);
