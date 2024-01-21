@@ -7,7 +7,7 @@ const OrderDetail = (props) => {
 
   const date = new Date(props.order.date).toDateString();
   const [status, setStatus] = useState(props.order.current_status);
-  const [crafter, setCrafter] = useState(props.user);
+  const [crafter, setCrafter] = useState(props.order.crafter);
   //keeps orderer from being pinged on page load when status is already delivered.
   const [originalStatus, setOriginalStatus] = useState(
     props.order.current_status
@@ -46,6 +46,9 @@ const OrderDetail = (props) => {
   //Add checks so Crafter doesn't get overwritten
   useEffect(() => {
     const updateOrder = async () => {
+      if (status === "ordered") {
+        setCrafter("");
+      }
       console.log("Status", status);
       const orderRef = doc(database, "orders", props.order.id);
       await updateDoc(orderRef, {
@@ -95,7 +98,7 @@ const OrderDetail = (props) => {
           </p>
           <p>
             <strong>Crafter: </strong>
-            {props.order.crafter}
+            {crafter}
           </p>
           <p>
             <strong>Current status: {status}</strong>
@@ -106,6 +109,7 @@ const OrderDetail = (props) => {
             id="statusDropdown"
             value={status}
             onChange={(e) => {
+              setCrafter(props.user);
               setStatus(e.target.value);
               //handleStatusChange(e.target.value)
             }}

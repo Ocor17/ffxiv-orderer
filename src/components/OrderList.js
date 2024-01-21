@@ -18,13 +18,13 @@ const OrderList = () => {
         const result = await getOrders();
 
         setOrders(result);
-        setUser(location.state.current_user.discord_name || {});
+        setUser(location.state.current_user || {});
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
     fetchData();
-  }, [location.state.current_user.discord_name]);
+  }, [location.state.current_user]);
 
   return (
     <div>

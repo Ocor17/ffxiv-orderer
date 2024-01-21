@@ -24,7 +24,7 @@ const SignIn = () => {
           navigate(
             "/",
             { replace: true },
-            { state: { current_user: active_user } }
+            { state: { current_user: active_user.discord_name } }
           );
         }
       };
@@ -39,7 +39,10 @@ const SignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(async () => {
         const active_user = await getUser(auth.currentUser.uid);
-        navigate("/", { replace: true, state: { current_user: active_user } });
+        navigate("/", {
+          replace: true,
+          state: { current_user: active_user.discord_name },
+        });
       })
       .catch((error) => {
         console.log(error);
