@@ -1,29 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import "../css/TopNavBar.css";
 import FCCrest from "../media/FCCrest.png";
-import { auth } from "../Firebase.js";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { getUserAuth, logoutUser } from "./Firestore";
 
-const TopNavBar = () => {
+const TopNavBar = ({ state }) => {
+  //TODO fix issue with authUser Home button not passing state correctly
   const navigate = useNavigate();
-  const [authUser, setAuthUser] = useState(null);
+  //const { state } = useLocation();
+  //const state = getAuth();
+  //console.log("location HOME", state);
+  const [authUser, setAuthUser] = useState(getUserAuth());
+  //const auth = getAuth();
+  //console.log("AUTH CURRENT USER TOP NAV BAR", auth.currentUser);
+  console.log("NAVBAR AUTH USER", authUser);
 
-  useEffect(() => {
-    const listen = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setAuthUser(user);
-      } else {
-        setAuthUser(null);
-      }
-    });
-    return () => {
-      listen();
-    };
-  }, []);
+  useEffect(() => {}, []);
 
   const usersignOut = () => {
-    signOut(auth)
+    logoutUser()
       .then(() => {
         console.log("sign out success");
 
@@ -39,9 +35,14 @@ const TopNavBar = () => {
           <img src={FCCrest} alt="FC Crest" />
         </li>
         <li>
-          <Link className="navItem" to="/">
+          <Link
+            className="navItem"
+            to="/"
+            state={state}
+            onClick={() => navigate("/home")}
+          >
             Home
-          </Link>{" "}
+          </Link>
         </li>
         <li className="logout">
           <button className="navItem" onClick={usersignOut}>

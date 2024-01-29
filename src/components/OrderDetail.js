@@ -3,7 +3,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { database } from "../Firebase";
 //TODO reflect crafter update on page
 const OrderDetail = (props) => {
-  console.log("PROPS:", props);
+  //console.log("PROPS:", props);
 
   const date = new Date(props.order.date).toDateString();
   const [status, setStatus] = useState(props.order.current_status);
@@ -32,8 +32,8 @@ const OrderDetail = (props) => {
     }
   };
 
-  console.log("Formatted Date", date);
-  console.log(crafter);
+  //console.log("Formatted Date", date);
+  //console.log(crafter);
 
   const STATUS_CHOICES = {
     ordered: "ordered",
@@ -43,7 +43,7 @@ const OrderDetail = (props) => {
     archived: "archived",
   };
 
-  //Add checks so Crafter doesn't get overwritten
+  //Add checks so Crafter doesn't get overwritten if another crafter is already working
   useEffect(() => {
     const updateOrder = async () => {
       if (status === "ordered") {
@@ -101,7 +101,7 @@ const OrderDetail = (props) => {
             {crafter}
           </p>
           <p>
-            <strong>Current status: {status}</strong>
+            <strong>Current status: {STATUS_CHOICES[status]}</strong>
           </p>
 
           <label htmlFor="statusDropdown"> Change Status:</label>

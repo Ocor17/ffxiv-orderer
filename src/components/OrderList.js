@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getOrders } from "./Firestore";
+import { getUserAuth } from "./Firestore";
 //TODO Fix location.state is null form back button
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
-  const [user, setUser] = useState({});
-  const location = useLocation();
-  console.log("ORDERLIST LOCATION:", location);
+  const [user, setUser] = useState(getUserAuth());
+  //const location = useLocation();
+  //console.log("ORDERLIST LOCATION:", location);
 
-  console.log("ORDERLIST CURRENT USER:", user);
+  console.log("USER AUTH", getUserAuth());
+
+  //console.log("ORDERLIST CURRENT USER:", user);
 
   // Fetch orders from Firestore
 
@@ -18,13 +21,13 @@ const OrderList = () => {
         const result = await getOrders();
 
         setOrders(result);
-        setUser(location.state.current_user || {});
+        //setUser(location.state.current_user || {});
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
     fetchData();
-  }, [location.state.current_user]);
+  }, []);
 
   return (
     <div>
@@ -36,7 +39,7 @@ const OrderList = () => {
               <Link
                 className="orderList"
                 to={`/orders/${order.id}`}
-                state={{ order, user }}
+                state={{ order }}
               >
                 {order.orderer} - {order.current_status}
               </Link>

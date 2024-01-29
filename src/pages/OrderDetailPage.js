@@ -11,12 +11,12 @@ const OrderDetailPage = () => {
   const location = useLocation();
 
   const curr_order = location.state.order || {};
-  const user = location.state.user || {};
+  const user = localStorage.getItem("discord_name");
   const pathname = location.pathname;
 
-  console.log("STATE", location);
+  //console.log("STATE", location);
 
-  console.log("ORDER", curr_order);
+  //console.log("ORDER", curr_order);
 
   console.log("USER", user);
   //TODO something wrong with back button state when

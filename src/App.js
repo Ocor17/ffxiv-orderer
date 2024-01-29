@@ -16,9 +16,12 @@ import Forgot from "./pages/Forgot";
 import { auth } from "./Firebase";
 import { getUser } from "./components/Firestore";
 
+//reevaluate flow of this file now that create context can pass auth state
+
 function RequireAuth({ children }) {
   const location = useLocation();
   const [userActive, setUserActive] = useState(null);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

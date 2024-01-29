@@ -3,7 +3,7 @@ import { auth } from "../../Firebase";
 import { useNavigate, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import "../../css/SignIn.css";
-import { getUser } from "../Firestore";
+import { getUser, loginUser } from "../Firestore";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -36,9 +36,13 @@ const SignIn = () => {
 
   const signIn = (e) => {
     e.preventDefault();
+    loginUser(email, password);
+    //console.log(auth.currentUser);
+    //console.log(auth.currentUser.uid)
     signInWithEmailAndPassword(auth, email, password)
       .then(async () => {
         const active_user = await getUser(auth.currentUser.uid);
+        localStorage.setItem("discord_name", active_user.discord_name);
         navigate("/", {
           replace: true,
           state: { current_user: active_user.discord_name },

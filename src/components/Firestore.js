@@ -12,6 +12,14 @@ import {
   where,
 } from "firebase/firestore";
 import { database } from "../Firebase";
+import {
+  signInWithEmailAndPassword,
+  getAuth,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  setPersistence,
+  browserSessionPersistence,
+} from "firebase/auth";
 
 const ORDER_COLLECTION = "orders";
 const USER_COLLECTION = "users";
@@ -118,3 +126,34 @@ export async function getOrders(uid) {
 
   return allOrders;
 }
+
+export const loginUser = (email, password) => {
+  const auth = getAuth();
+  setPersistence(auth, browserSessionPersistence);
+  return signInWithEmailAndPassword(auth, email, password);
+};
+
+export const registerUser = (email, password, confirm_password) => {
+  if (password !== confirm_password) {
+    alert("Passwords do not match");
+    return;
+  }
+  const auth = getAuth();
+  return createUserWithEmailAndPassword(auth, email, password);
+};
+
+export const startAuthListener = (callback) => {
+  return onAuthStateChanged(getAuth(), (user) => {
+    callback(user);
+  });
+};
+
+export const getUserAuth = () => {
+  const auth = getAuth();
+  return auth.currentUser;
+};
+
+export const logoutUser = () => {
+  const auth = getAuth();
+  return auth.signOut();
+};
