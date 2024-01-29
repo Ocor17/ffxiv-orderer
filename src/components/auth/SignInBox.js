@@ -42,7 +42,7 @@ const SignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(async () => {
         const active_user = await getUser(auth.currentUser.uid);
-        localStorage.setItem("discord_name", active_user.discord_name);
+        sessionStorage.setItem("discord_name", active_user.discord_name);
         navigate("/", {
           replace: true,
           state: { current_user: active_user.discord_name },

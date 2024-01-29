@@ -11,7 +11,7 @@ const OrderDetailPage = () => {
   const location = useLocation();
 
   const curr_order = location.state.order || {};
-  const user = localStorage.getItem("discord_name");
+  const user = sessionStorage.getItem("discord_name");
   const pathname = location.pathname;
 
   //console.log("STATE", location);

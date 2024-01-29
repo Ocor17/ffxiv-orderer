@@ -21,6 +21,7 @@ const TopNavBar = ({ state }) => {
   const usersignOut = () => {
     logoutUser()
       .then(() => {
+        sessionStorage.clear();
         console.log("sign out success");
 
         navigate("/signin", { replace: true });
