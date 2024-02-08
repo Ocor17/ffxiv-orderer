@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { auth } from "../../Firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import "../../css/SignIn.css";
 
 const Forgot = () => {
@@ -10,7 +9,7 @@ const Forgot = () => {
 
   const [email, setEmail] = useState("");
 
-  const forgot = (e) => {
+  const forgot = (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     sendPasswordResetEmail(auth, email)
@@ -21,6 +20,8 @@ const Forgot = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+
+        console.log(errorCode, errorMessage);
       });
   };
 
@@ -39,10 +40,10 @@ const Forgot = () => {
           Reset
         </button>
       </form>
-      <p className="forgot" align="center">
+      <p className="forgot" text-align="center">
         <Link to="/signin">Sign In</Link>
       </p>
-      <p className="forgot" align="center">
+      <p className="forgot" text-align="center">
         <Link to="/signup">Sign Up</Link>
       </p>
     </div>

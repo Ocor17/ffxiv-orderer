@@ -4,7 +4,7 @@ import OrderList from "../components/OrderList";
 function HomePage() {
   return (
     <>
-      <TopNavBar />
+      <TopNavBar state={undefined} />
       <div className="body-style">
         <OrderList />
       </div>

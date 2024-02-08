@@ -1,8 +1,8 @@
 // ProfileButton.js
-import React from "react";
 import { Link } from "react-router-dom";
 
-const ProfileButton = ({ user }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ProfileButton = ({ user }: any) => {
   // Customize the rendering based on your design and user information
   return (
     <Link to="/profile">

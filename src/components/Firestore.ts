@@ -1,11 +1,7 @@
 import {
   addDoc,
   collection,
-  deleteDoc,
-  doc,
   getDocs,
-  getDoc,
-  onSnapshot,
   orderBy,
   query,
   setDoc,
@@ -19,18 +15,20 @@ import {
   onAuthStateChanged,
   setPersistence,
   browserSessionPersistence,
+  User,
 } from "firebase/auth";
+import { UUID } from "crypto";
 
 const ORDER_COLLECTION = "orders";
 const USER_COLLECTION = "users";
 export function addOrder(
-  uid,
-  crafter,
-  details,
-  order_date,
-  orderer,
-  oderer_discord,
-  status
+  uid: UUID,
+  crafter: string,
+  details: string,
+  order_date: unknown,
+  orderer: string,
+  oderer_discord: string,
+  status: string
 ) {
   addDoc(collection(database, ORDER_COLLECTION), {
     uid,
@@ -43,8 +41,8 @@ export function addOrder(
   });
 }
 
-export async function addUser(auth_id, discordCode) {
-  if (!checkDiscordCode(auth_id, discordCode)) {
+export async function addUser(auth_id: string, discordCode: string) {
+  if (!checkDiscordCode(discordCode)) {
     console.log("User Not Found");
     return;
   }
@@ -61,7 +59,7 @@ export async function addUser(auth_id, discordCode) {
 }
 
 //discordCode is the registration code given.
-async function checkDiscordCode(auth_id, discordCode) {
+async function checkDiscordCode(discordCode: string) {
   const userQuery = query(
     collection(database, USER_COLLECTION),
     where("discordCode", "==", discordCode)
@@ -83,7 +81,7 @@ async function checkDiscordCode(auth_id, discordCode) {
   }
 }
 
-export async function getUser(auth_id) {
+export async function getUser(auth_id: unknown) {
   const userQuery = query(
     collection(database, USER_COLLECTION),
     where("auth_id", "==", auth_id)
@@ -105,14 +103,14 @@ export async function getUser(auth_id) {
   }
 }
 
-export async function getOrders(uid) {
+export async function getOrders() {
   const orders = query(
     collection(database, ORDER_COLLECTION),
     orderBy("order_date", "asc")
   );
   const querySnapshot = await getDocs(orders);
   //console.log("ORDERS TRASH", orders, querySnapshot);
-  let allOrders = [];
+  const allOrders = [];
   for (const documentSnapshot of querySnapshot.docs) {
     const order = documentSnapshot.data();
     await allOrders.push({
@@ -127,13 +125,17 @@ export async function getOrders(uid) {
   return allOrders;
 }
 
-export const loginUser = (email, password) => {
+export const loginUser = (email: string, password: string) => {
   const auth = getAuth();
   setPersistence(auth, browserSessionPersistence);
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-export const registerUser = (email, password, confirm_password) => {
+export const registerUser = (
+  email: string,
+  password: string,
+  confirm_password: string
+) => {
   if (password !== confirm_password) {
     alert("Passwords do not match");
     return;
@@ -142,7 +144,7 @@ export const registerUser = (email, password, confirm_password) => {
   return createUserWithEmailAndPassword(auth, email, password);
 };
 
-export const startAuthListener = (callback) => {
+export const startAuthListener = (callback: (arg0: User | null) => void) => {
   return onAuthStateChanged(getAuth(), (user) => {
     callback(user);
   });

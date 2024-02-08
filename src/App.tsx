@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -6,19 +6,19 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import OrderDetailPage from "./pages/OrderDetailPage";
-import HomePage from "./pages/Home";
-import "./App.css";
-import ErrorPage from "./pages/ErrorPage";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import Forgot from "./pages/Forgot";
+import OrderDetailPage from "./pages/OrderDetailPage.tsx";
+import HomePage from "./pages/Home.tsx";
+import "../app/globals.css";
+import ErrorPage from "./pages/ErrorPage.tsx";
+import SignIn from "./pages/SignIn.tsx";
+import SignUp from "./pages/SignUp.tsx";
+import Forgot from "./pages/Forgot.tsx";
 import { auth } from "./Firebase";
 import { getUser } from "./components/Firestore";
 
 //reevaluate flow of this file now that create context can pass auth state
 
-function RequireAuth({ children }) {
+function RequireAuth({ children }: { children: JSX.Element }) {
   const location = useLocation();
   const [userActive, setUserActive] = useState(null);
 
@@ -27,8 +27,8 @@ function RequireAuth({ children }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userActiveData = await getUser(auth.currentUser.uid);
-        setUserActive(userActiveData.active);
+        const userActiveData = await getUser(auth?.currentUser?.uid);
+        setUserActive(userActiveData?.active);
         //console.log("USERDATA",userActiveData)
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -40,7 +40,6 @@ function RequireAuth({ children }) {
 
     fetchData();
   }, []);
-
   //console.log("USER ACTIVE:",userActive);
 
   if (loading) {
@@ -51,10 +50,31 @@ function RequireAuth({ children }) {
     return <Navigate to="/signin" state={{ from: location }} replace />;
   }
 
+  console.log("Children:", children);
   return children;
 }
 
 function App() {
+  //check if user is already authenticated and skip login
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [redirectHome, setRedirectHome] = useState(false);
+  console.log("redirectHome", redirectHome);
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const unsubscribe = auth.onAuthStateChanged((user: any) => {
+      if (user) {
+        console.log("User is signed in");
+        setRedirectHome(true);
+      } else {
+        console.log("User is signed out");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <>
       <head>

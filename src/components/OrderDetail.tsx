@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { database } from "../Firebase";
 //TODO reflect crafter update on page
-const OrderDetail = (props) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const OrderDetail = (props: any) => {
   //console.log("PROPS:", props);
 
   const date = new Date(props.order.date).toDateString();
@@ -13,7 +14,10 @@ const OrderDetail = (props) => {
     props.order.current_status
   );
 
-  const webhookMessage = async (webhookURL, message) => {
+  const webhookMessage = async (
+    webhookURL: string | URL | Request,
+    message: string
+  ) => {
     try {
       const response = await fetch(webhookURL, {
         method: "POST",
@@ -35,7 +39,7 @@ const OrderDetail = (props) => {
   //console.log("Formatted Date", date);
   //console.log(crafter);
 
-  const STATUS_CHOICES = {
+  const STATUS_CHOICES: { [key: string]: string } = {
     ordered: "ordered",
     inProgress: "in progress",
     done: "done",

@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 .main {
   background-color: #ffffff77;
   width: 400px;
@@ -42,6 +45,7 @@ form.form1 {
   width: 76%;
   color: rgb(38, 50, 56);
   font-weight: 700;
+
   font-size: 14px;
   letter-spacing: 1px;
   background: rgba(255, 249, 249, 0.979);

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { auth } from "../../Firebase";
 import { useNavigate, Link } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import "../../css/SignIn.css";
-import { getUser, loginUser } from "../Firestore";
+import { getUser, loginUser, getUserAuth } from "../Firestore";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -13,19 +12,19 @@ const SignIn = () => {
 
   useEffect(() => {
     // Check if the user is already authenticated, redirect to home if true
+    console.log("Auth", getUserAuth());
     if (auth.currentUser) {
       console.log("User is already authenticated. Redirecting to home.");
 
       const fetchData = async () => {
-        const active_user = await getUser(auth.currentUser.uid);
-        console.log("Active User", active_user.displayName);
+        const active_user = await getUser(auth?.currentUser?.uid);
+        console.log("Active User", active_user?.displayName);
 
-        if (active_user.active === true) {
-          navigate(
-            "/",
-            { replace: true },
-            { state: { current_user: active_user.discord_name } }
-          );
+        if (active_user?.active === true) {
+          navigate("/", {
+            replace: true,
+            state: { current_user: active_user.discord_name },
+          });
         }
       };
       fetchData();
@@ -34,18 +33,18 @@ const SignIn = () => {
     //console.log(auth.currentUser);
   }, [navigate]);
 
-  const signIn = (e) => {
+  const signIn = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    loginUser(email, password);
+    //loginUser(email, password);
     //console.log(auth.currentUser);
     //console.log(auth.currentUser.uid)
-    signInWithEmailAndPassword(auth, email, password)
+    loginUser(email, password)
       .then(async () => {
-        const active_user = await getUser(auth.currentUser.uid);
-        sessionStorage.setItem("discord_name", active_user.discord_name);
+        const active_user = await getUser(auth?.currentUser?.uid);
+        sessionStorage.setItem("discord_name", active_user?.discord_name);
         navigate("/", {
           replace: true,
-          state: { current_user: active_user.discord_name },
+          state: { current_user: active_user?.discord_name },
         });
       })
       .catch((error) => {
@@ -76,10 +75,10 @@ const SignIn = () => {
           Log In
         </button>
       </form>
-      <p className="forgot" align="center">
+      <p className="forgot" text-align="center">
         <Link to="/signup">Sign Up</Link>
       </p>
-      <p className="forgot" align="center">
+      <p className="forgot" text-align="center">
         <Link to="/forgot">Forgot Password?</Link>
       </p>
     </div>

@@ -5,24 +5,23 @@ name: Node.js CI
 
 env:
   CI: false
-  REACT_APP_APIKEY: '${{ secrets.REACT_APP_APIKEY }}'
-  REACT_APP_AUTHDOMAIN: '${{ secrets.REACT_APP_AUTHDOMAIN }}'
-  REACT_APP_PROJECTID: '${{ secrets.REACT_APP_PROJECTID }}'
-  REACT_APP_STORAGEBUCKET: '${{ secrets.REACT_APP_STORAGEBUCKET }}'
-  REACT_APP_MESSAGESENDERID: '${{ secrets.REACT_APP_MESSAGESENDERID }}'
-  REACT_APP_APPID: '${{ secrets.REACT_APP_APPID }}'
-  REACT_APP_MEASUREMENTID: '${{ secrets.REACT_APP_MEASUREMENTID }}'
-  REACT_APP_WEBHOOK_URL: '${{ secrets.REACT_APP_WEBHOOK_URL }}'
+  VITE_APP_APIKEY: "${{ secrets.REACT_APP_APIKEY }}"
+  VITE_APP_AUTHDOMAIN: "${{ secrets.REACT_APP_AUTHDOMAIN }}"
+  VITE_APP_PROJECTID: "${{ secrets.REACT_APP_PROJECTID }}"
+  VITE_APP_STORAGEBUCKET: "${{ secrets.REACT_APP_STORAGEBUCKET }}"
+  VITE_APP_MESSAGESENDERID: "${{ secrets.REACT_APP_MESSAGESENDERID }}"
+  VITE_APP_APPID: "${{ secrets.REACT_APP_APPID }}"
+  VITE_APP_MEASUREMENTID: "${{ secrets.REACT_APP_MEASUREMENTID }}"
+  VITE_APP_WEBHOOK_URL: "${{ secrets.REACT_APP_WEBHOOK_URL }}"
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -31,27 +30,26 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     env:
-      REACT_APP_APIKEY: '${{ secrets.REACT_APP_APIKEY }}'
-      REACT_APP_AUTHDOMAIN: '${{ secrets.REACT_APP_AUTHDOMAIN }}'
-      REACT_APP_PROJECTID: '${{ secrets.REACT_APP_PROJECTID }}'
-      REACT_APP_STORAGEBUCKET: '${{ secrets.REACT_APP_STORAGEBUCKET }}'
-      REACT_APP_MESSAGESENDERID: '${{ secrets.REACT_APP_MESSAGESENDERID }}'
-      REACT_APP_APPID: '${{ secrets.REACT_APP_APPID }}'
-      REACT_APP_MEASUREMENTID: '${{ secrets.REACT_APP_MEASUREMENTID }}'
-      REACT_APP_WEBHOOK_URL: '${{ secrets.REACT_APP_WEBHOOK_URL }}'
+      VITE_APP_APIKEY: "${{ secrets.REACT_APP_APIKEY }}"
+      VITE_APP_AUTHDOMAIN: "${{ secrets.REACT_APP_AUTHDOMAIN }}"
+      VITE_APP_PROJECTID: "${{ secrets.REACT_APP_PROJECTID }}"
+      VITE_APP_STORAGEBUCKET: "${{ secrets.REACT_APP_STORAGEBUCKET }}"
+      VITE_APP_MESSAGESENDERID: "${{ secrets.REACT_APP_MESSAGESENDERID }}"
+      VITE_APP_APPID: "${{ secrets.REACT_APP_APPID }}"
+      VITE_APP_MEASUREMENTID: "${{ secrets.REACT_APP_MEASUREMENTID }}"
+      VITE_APP_WEBHOOK_URL: "${{ secrets.REACT_APP_WEBHOOK_URL }}"
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install
-    - run: npm run build
-    - uses: FirebaseExtended/action-hosting-deploy@v0
-      with:
-        repoToken: '${{ secrets.GITHUB_TOKEN }}'
-        firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_FFXIV_INVENTORY }}'
-        channelId: live
-        projectId: ffxiv-inventory
-
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm install
+      - run: npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_FFXIV_INVENTORY }}"
+          channelId: live
+          projectId: ffxiv-inventory

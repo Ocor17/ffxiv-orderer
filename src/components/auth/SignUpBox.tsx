@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { addUser } from "../Firestore";
 import { auth } from "../../Firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -13,7 +13,7 @@ const SignUp = () => {
   const [passwordReenter, setPasswordReenter] = useState("");
   const [discordCode, setDiscordCode] = useState("");
 
-  const signUp = (e) => {
+  const signUp = (e: { preventDefault: () => void }) => {
     if (password === passwordReenter) {
       e.preventDefault();
       createUserWithEmailAndPassword(auth, email, password)
@@ -66,7 +66,9 @@ const SignUp = () => {
           Sign Up
         </button>
       </form>
-      <p className="forgot" align="center">
+      <p className="forgot" text-align="center">
+        Already have an account?
+        <br />
         <Link to="/signin">Sign In</Link>
       </p>
     </div>

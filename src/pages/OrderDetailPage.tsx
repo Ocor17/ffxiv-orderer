@@ -1,4 +1,3 @@
-import React from "react";
 import TopNavBar from "../components/TopNavBar";
 import { Link, useLocation } from "react-router-dom";
 import OrderDetail from "../components/OrderDetail";
@@ -22,7 +21,7 @@ const OrderDetailPage = () => {
   //TODO something wrong with back button state when
   return (
     <>
-      <TopNavBar />
+      <TopNavBar state={undefined} />
       <h2 className="body-style">
         <Link to="/" className="button" state={{ current_user: user }}>
           Back
