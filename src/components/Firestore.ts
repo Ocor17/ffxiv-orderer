@@ -82,6 +82,7 @@ async function checkDiscordCode(discordCode: string) {
 }
 
 export async function getUser(auth_id: unknown) {
+  //console.log("Getting user---------------------------");
   const userQuery = query(
     collection(database, USER_COLLECTION),
     where("auth_id", "==", auth_id)
@@ -92,9 +93,10 @@ export async function getUser(auth_id: unknown) {
     if (!userSnapshot.empty) {
       const userData = userSnapshot.docs[0].data();
       //console.log("USER", userData);
+      //console.log("FOUND USER");
       return userData;
     } else {
-      console.log("User not found");
+      //console.log("User not found");
       return null;
     }
   } catch (error) {
@@ -158,4 +160,17 @@ export const getUserAuth = () => {
 export const logoutUser = () => {
   const auth = getAuth();
   return auth.signOut();
+};
+
+export const getUserAuthExists = () => {
+  return new Promise((resolve, reject) => {
+    const auth = getAuth();
+    onAuthStateChanged(
+      auth,
+      (user) => {
+        resolve(user !== null);
+      },
+      reject
+    );
+  });
 };

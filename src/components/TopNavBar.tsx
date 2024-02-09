@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../css/TopNavBar.css";
 import FCCrest from "../media/FCCrest.png";
-import { getUserAuth, logoutUser } from "./Firestore";
+import { logoutUser } from "./Firestore";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TopNavBar = ({ state }: any) => {
@@ -11,10 +11,9 @@ const TopNavBar = ({ state }: any) => {
   //const { state } = useLocation();
   //const state = getAuth();
   //console.log("location HOME", state);
-  const [authUser] = useState(getUserAuth());
   //const auth = getAuth();
   //console.log("AUTH CURRENT USER TOP NAV BAR", auth.currentUser);
-  console.log("NAVBAR AUTH USER", authUser);
+  //console.log("NAVBAR AUTH USER", authUser);
 
   useEffect(() => {}, []);
 

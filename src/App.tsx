@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -13,68 +13,54 @@ import ErrorPage from "./pages/ErrorPage.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import Forgot from "./pages/Forgot.tsx";
-import { auth } from "./Firebase";
-import { getUser } from "./components/Firestore";
+import { getUserAuthExists } from "./components/Firestore";
 
 //reevaluate flow of this file now that create context can pass auth state
 
-function RequireAuth({ children }: { children: JSX.Element }) {
+function RequireAuth({ children }: { children: React.ReactNode }) {
   const location = useLocation();
-  const [userActive, setUserActive] = useState(null);
-
   const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    // Check if the user is authenticated when the component mounts
+    //console.log("ENTERING USE EFFECT");
+    //console.log("USER AUTH EXISTS", getUserAuthExists());
+    const checkAuthentication = async () => {
       try {
-        const userActiveData = await getUser(auth?.currentUser?.uid);
-        setUserActive(userActiveData?.active);
-        //console.log("USERDATA",userActiveData)
+        const userExists = await getUserAuthExists();
+
+        if (userExists) {
+          //console.log("USER AUTH EXISTS");
+          //console.log("GOT USER AUTH  ");
+          //console.log("USER AUTH", getUserAuthExists());
+          setAuthenticated(true);
+        }
       } catch (error) {
-        console.error("Error fetching user:", error);
-        setUserActive(null);
+        setAuthenticated(false);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    checkAuthentication();
   }, []);
-  //console.log("USER ACTIVE:",userActive);
 
   if (loading) {
-    return null;
+    // Render loading indicator if still loading
+    return <div>Loading...</div>;
+  }
+  //console.log("authenticated", authenticated);
+  if (authenticated) {
+    // Render children only if authenticated
+    return children;
   }
 
-  if (!auth.currentUser || !userActive) {
-    return <Navigate to="/signin" state={{ from: location }} replace />;
-  }
-
-  console.log("Children:", children);
-  return children;
+  // Redirect to sign-in page if not authenticated
+  return <Navigate to="/signin" state={{ from: location }} replace />;
 }
 
 function App() {
-  //check if user is already authenticated and skip login
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [redirectHome, setRedirectHome] = useState(false);
-  console.log("redirectHome", redirectHome);
-
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const unsubscribe = auth.onAuthStateChanged((user: any) => {
-      if (user) {
-        console.log("User is signed in");
-        setRedirectHome(true);
-      } else {
-        console.log("User is signed out");
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
   return (
     <>
       <head>

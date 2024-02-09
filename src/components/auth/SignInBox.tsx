@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { auth } from "../../Firebase";
 import { useNavigate, Link } from "react-router-dom";
 import "../../css/SignIn.css";
-import { getUser, loginUser, getUserAuth } from "../Firestore";
+import { getUser, loginUser } from "../Firestore";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const SignIn = () => {
 
   useEffect(() => {
     // Check if the user is already authenticated, redirect to home if true
-    console.log("Auth", getUserAuth());
+    //console.log("Auth", getUserAuth());
     if (auth.currentUser) {
       console.log("User is already authenticated. Redirecting to home.");
 
@@ -42,6 +42,12 @@ const SignIn = () => {
       .then(async () => {
         const active_user = await getUser(auth?.currentUser?.uid);
         sessionStorage.setItem("discord_name", active_user?.discord_name);
+        if (active_user?.active !== true) {
+          sessionStorage.clear();
+          navigate("/signin", { replace: true });
+          return;
+        }
+        console.log("User is authenticated. Redirecting to home.");
         navigate("/", {
           replace: true,
           state: { current_user: active_user?.discord_name },
