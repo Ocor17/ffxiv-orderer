@@ -17,16 +17,18 @@ const OrderDetailPage = () => {
 
   //console.log("ORDER", curr_order);
 
-  console.log("USER", user);
+  //console.log("USER", user);
   //TODO something wrong with back button state when
   return (
     <>
       <TopNavBar state={undefined} />
-      <h2 className="body-style">
+      <br />
+      <h1 className="body-style">
         <Link to="/" className="button" state={{ current_user: user }}>
           Back
         </Link>
-      </h2>
+      </h1>
+      <br />
 
       <div className="body-style">
         <OrderDetail order={curr_order} user={user} pathname={pathname} />

@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 //TODO Fix location.state is null form back button
 
 const OrderList = () => {
@@ -43,6 +44,7 @@ const OrderList = () => {
           <TableRow>
             <TableHead className="w-[100px]">Orderer</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Order Date</TableHead>
             <TableHead>Details</TableHead>
             <TableHead className="text-right">Crafter</TableHead>
           </TableRow>
@@ -58,6 +60,7 @@ const OrderList = () => {
             >
               <TableCell className="font-medium">{order.orderer}</TableCell>
               <TableCell>{order.current_status}</TableCell>
+              <TableCell>{new Date(order.date).toDateString()}</TableCell>
               <TableCell>{order.details.substring(0, 40)}...</TableCell>
               <TableCell className="text-right">{order.crafter}</TableCell>
             </TableRow>

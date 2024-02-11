@@ -1,14 +1,37 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { auth } from "../../Firebase";
 import { useNavigate, Link } from "react-router-dom";
 import "../../css/SignIn.css";
 import { getUser, loginUser } from "../Firestore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+  password: z.string().min(2, {
+    message: "Password must be at least 2 characters.",
+  }),
+});
 
 const SignIn = () => {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  //const [email, setEmail] = useState("");
+  //const [password, setPassword] = useState("");
 
   useEffect(() => {
     // Check if the user is already authenticated, redirect to home if true
@@ -33,12 +56,22 @@ const SignIn = () => {
     //console.log(auth.currentUser);
   }, [navigate]);
 
-  const signIn = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    //loginUser(email, password);
-    //console.log(auth.currentUser);
-    //console.log(auth.currentUser.uid)
-    loginUser(email, password)
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    const username = values.username;
+    const password = values.password;
+
+    loginUser(username, password)
       .then(async () => {
         const active_user = await getUser(auth?.currentUser?.uid);
         sessionStorage.setItem("discord_name", active_user?.discord_name);
@@ -56,38 +89,71 @@ const SignIn = () => {
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
 
   return (
-    <div className="main">
-      <form className="form1" onSubmit={signIn}>
-        <h1 className="sign">Log In</h1>
-        <input
-          className="un"
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        ></input>
-        <input
-          className="pass"
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        ></input>
+    <>
+      <div className="main ">
+        <h1 className="sign">Log in </h1>
 
-        <button className="submit" type="submit">
-          Log In
-        </button>
-      </form>
-      <p className="forgot" text-align="center">
-        <Link to="/signup">Sign Up</Link>
-      </p>
-      <p className="forgot" text-align="center">
-        <Link to="/forgot">Forgot Password?</Link>
-      </p>
-    </div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-8 ml-4 mr-4 "
+          >
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="text-black"
+                      placeholder="Azem@example.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="text-black"
+                      type="password"
+                      placeholder="password123"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="mr-auto ml-auto ">
+              Login
+            </Button>
+          </form>
+        </Form>
+        <br />
+
+        <Button className="forgot ml-4" text-align="center ">
+          <Link to="/signup">Sign Up</Link>
+        </Button>
+
+        <br />
+        <Button className="forgot ml-4 mt-4" text-align="center">
+          <Link to="/forgot">Forgot Password?</Link>
+        </Button>
+      </div>
+      <div></div>
+    </>
   );
 };
 

@@ -59,7 +59,7 @@ export async function addUser(auth_id: string, discordCode: string) {
 }
 
 //discordCode is the registration code given.
-async function checkDiscordCode(discordCode: string) {
+export async function checkDiscordCode(discordCode: string) {
   const userQuery = query(
     collection(database, USER_COLLECTION),
     where("discordCode", "==", discordCode)
