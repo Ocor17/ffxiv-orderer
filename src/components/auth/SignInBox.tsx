@@ -143,14 +143,19 @@ const SignIn = () => {
         </Form>
         <br />
 
-        <Button className="forgot ml-4" text-align="center ">
-          <Link to="/signup">Sign Up</Link>
-        </Button>
+        <Link to="/signup">
+          {" "}
+          <Button className="forgot ml-4" text-align="center ">
+            Sign Up
+          </Button>
+        </Link>
 
         <br />
-        <Button className="forgot ml-4 mt-4" text-align="center">
-          <Link to="/forgot">Forgot Password?</Link>
-        </Button>
+        <Link to="/forgot">
+          <Button className="forgot ml-4 mt-4" text-align="center">
+            Forgot Password?
+          </Button>
+        </Link>
       </div>
       <div></div>
     </>

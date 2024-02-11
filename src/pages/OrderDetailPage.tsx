@@ -1,6 +1,7 @@
 import TopNavBar from "../components/TopNavBar";
 import { Link, useLocation } from "react-router-dom";
 import OrderDetail from "../components/OrderDetail";
+import { Button } from "@/components/ui/button";
 //import{auth} from '../Firebase'
 
 const OrderDetailPage = () => {
@@ -24,8 +25,10 @@ const OrderDetailPage = () => {
       <TopNavBar state={undefined} />
       <br />
       <h1 className="body-style">
-        <Link to="/" className="button" state={{ current_user: user }}>
-          Back
+        <Link to="/home" state={{ current_user: user }}>
+          <Button className="bg-white text-black hover:bg-blue-800 hover:text-white">
+            Back
+          </Button>
         </Link>
       </h1>
       <br />

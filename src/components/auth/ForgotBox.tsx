@@ -112,14 +112,15 @@ const Forgot = () => {
       </Form>
       <br />
       <p className="forgot ml-4" text-align="center">
-        <Button>
-          <Link to="/signin">Sign In</Link>
-        </Button>
+        <Link to="/signin">
+          <Button>Sign In</Button>
+        </Link>
       </p>
       <p className="forgot ml-4" text-align="center">
-        <Button>
-          <Link to="/signup">Sign Up</Link>
-        </Button>
+        <Link to="/signup">
+          {" "}
+          <Button>Sign Up</Button>
+        </Link>
       </p>
     </div>
   );

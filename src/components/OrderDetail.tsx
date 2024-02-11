@@ -2,14 +2,7 @@ import { Key, useEffect, useState } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { database } from "../Firebase";
 import Linkify from "react-linkify";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -19,13 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Button,
-  ButtonGroup,
-  ButtonIcon,
-  ButtonLabel,
-} from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 //TODO Revisit this to check it it's safe to use with component
 const formatTextWithLinks = (text: string) => {

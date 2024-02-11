@@ -194,9 +194,9 @@ const SignUp = () => {
       <p className="forgot ml-4 " text-align="center">
         Already have an account?
         <br />
-        <Button className="mt-2">
-          <Link to="/signin">Sign In</Link>
-        </Button>
+        <Link to="/signin">
+          <Button className="mt-2">Sign In</Button>
+        </Link>
       </p>
     </div>
   );
