@@ -71,8 +71,7 @@ export async function checkDiscordCode(discordCode: string) {
       return false;
     } else {
       console.log("User found");
-      //userSnapshot.set({auth_id:auth_id}, {merge:true});
-      //console.log("User updated")
+
       return true;
     }
   } catch (error) {
@@ -82,7 +81,6 @@ export async function checkDiscordCode(discordCode: string) {
 }
 
 export async function getUser(auth_id: unknown) {
-  //console.log("Getting user---------------------------");
   const userQuery = query(
     collection(database, USER_COLLECTION),
     where("auth_id", "==", auth_id)
@@ -92,11 +90,9 @@ export async function getUser(auth_id: unknown) {
 
     if (!userSnapshot.empty) {
       const userData = userSnapshot.docs[0].data();
-      //console.log("USER", userData);
-      //console.log("FOUND USER");
+
       return userData;
     } else {
-      //console.log("User not found");
       return null;
     }
   } catch (error) {
@@ -111,7 +107,6 @@ export async function getOrders() {
     orderBy("order_date", "asc")
   );
   const querySnapshot = await getDocs(orders);
-  //console.log("ORDERS TRASH", orders, querySnapshot);
   const allOrders = [];
   for (const documentSnapshot of querySnapshot.docs) {
     const order = documentSnapshot.data();
@@ -121,8 +116,6 @@ export async function getOrders() {
       id: documentSnapshot.id,
     });
   }
-
-  //console.log("ORDERS",allOrders);
 
   return allOrders;
 }

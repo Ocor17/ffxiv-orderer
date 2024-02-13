@@ -11,13 +11,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-//TODO Fix location.state is null form back button
-
 const OrderList = () => {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [orders, setOrders] = useState<any[]>([]);
-  //console.log("USER AUTH", getUserAuth());
 
   // Fetch orders from Firestore
 

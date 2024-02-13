@@ -2,24 +2,14 @@ import TopNavBar from "../components/TopNavBar";
 import { Link, useLocation } from "react-router-dom";
 import OrderDetail from "../components/OrderDetail";
 import { Button } from "@/components/ui/button";
-//import{auth} from '../Firebase'
 
 const OrderDetailPage = () => {
-  //console.log("USER", auth.currentUser);
-
-  //const {id} = useParams();
   const location = useLocation();
 
   const curr_order = location.state.order || {};
   const user = sessionStorage.getItem("discord_name");
   const pathname = location.pathname;
 
-  //console.log("STATE", location);
-
-  //console.log("ORDER", curr_order);
-
-  //console.log("USER", user);
-  //TODO something wrong with back button state when
   return (
     <>
       <TopNavBar state={undefined} />

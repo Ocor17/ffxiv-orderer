@@ -22,8 +22,6 @@ const firebaseConfig = {
   measurementId: String(import.meta.env.VITE_APP_MEASUREMENTID),
 };
 
-//console.log("here to");
-//console.log(firebaseConfig);
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(app);

@@ -46,8 +46,6 @@ const SignUp = () => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     const username = values.username;
     const password = values.password;
     const passwordReenter = values.passwordReenter;
@@ -73,42 +71,6 @@ const SignUp = () => {
 
   return (
     <div className="main">
-      {/*       <form className="form1" onSubmit={signUp}>
-        <h1 className="sign">Sign Up</h1>
-        <input
-          className="un"
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        ></input>
-        <input
-          className="pass"
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        ></input>
-        <input
-          className="pass"
-          type="password"
-          placeholder="Reenter your password"
-          value={passwordReenter}
-          onChange={(e) => setPasswordReenter(e.target.value)}
-        ></input>
-        <input
-          className="un"
-          type="text"
-          placeholder="Enter your discord registration key"
-          value={discordCode}
-          onChange={(e) => setDiscordCode(e.target.value)}
-        ></input>
-
-        <button className="submit" type="submit">
-          Sign Up
-        </button>
-      </form> */}
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

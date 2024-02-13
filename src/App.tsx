@@ -24,16 +24,12 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Check if the user is authenticated when the component mounts
-    //console.log("ENTERING USE EFFECT");
-    //console.log("USER AUTH EXISTS", getUserAuthExists());
+
     const checkAuthentication = async () => {
       try {
         const userExists = await getUserAuthExists();
 
         if (userExists) {
-          //console.log("USER AUTH EXISTS");
-          //console.log("GOT USER AUTH  ");
-          //console.log("USER AUTH", getUserAuthExists());
           setAuthenticated(true);
         }
       } catch (error) {
@@ -50,7 +46,6 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
     // Render loading indicator if still loading
     return <div>Loading...</div>;
   }
-  //console.log("authenticated", authenticated);
   if (authenticated) {
     // Render children only if authenticated
     return children;

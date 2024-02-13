@@ -30,12 +30,9 @@ const formSchema = z.object({
 const SignIn = () => {
   const navigate = useNavigate();
 
-  //const [email, setEmail] = useState("");
-  //const [password, setPassword] = useState("");
-
   useEffect(() => {
     // Check if the user is already authenticated, redirect to home if true
-    //console.log("Auth", getUserAuth());
+
     if (auth.currentUser) {
       console.log("User is already authenticated. Redirecting to home.");
 
@@ -52,8 +49,6 @@ const SignIn = () => {
       };
       fetchData();
     }
-    //console.log("Effect called" );
-    //console.log(auth.currentUser);
   }, [navigate]);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,10 +59,7 @@ const SignIn = () => {
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     const username = values.username;
     const password = values.password;
 

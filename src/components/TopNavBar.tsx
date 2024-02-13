@@ -8,12 +8,6 @@ import { logoutUser } from "./Firestore";
 const TopNavBar = ({ state }: any) => {
   //TODO fix issue with authUser Home button not passing state correctly
   const navigate = useNavigate();
-  //const { state } = useLocation();
-  //const state = getAuth();
-  //console.log("location HOME", state);
-  //const auth = getAuth();
-  //console.log("AUTH CURRENT USER TOP NAV BAR", auth.currentUser);
-  //console.log("NAVBAR AUTH USER", authUser);
 
   useEffect(() => {}, []);
 

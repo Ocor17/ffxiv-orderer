@@ -32,10 +32,7 @@ const Forgot = () => {
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     const email = values.email;
 
     sendPasswordResetEmail(auth, email)
@@ -51,38 +48,10 @@ const Forgot = () => {
       });
   }
 
-  /*   const forgot = (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        alert("Password reset email sent!");
-        navigate("/signin", { replace: true });
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
-        console.log(errorCode, errorMessage);
-      });
-  }; */
-
   return (
     <div className="main">
       <h1 className="sign">Forgot Password</h1>
-      {/*       <form className="form1" onSubmit={forgot}>
-        <h1 className="sign">Reset Password</h1>
-        <input
-          className="un"
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        ></input>
-        <button className="submit" type="submit">
-          Reset
-        </button>
-      </form> */}
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

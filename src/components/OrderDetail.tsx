@@ -37,7 +37,7 @@ const formatTextWithLinks = (text: string) => {
   );
 };
 
-//TODO reflect crafter update on page
+//TODO reflect crafter update on page in realtime
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const OrderDetail = (props: any) => {
   //console.log("PROPS:", props);
@@ -72,9 +72,6 @@ const OrderDetail = (props: any) => {
     }
   };
 
-  //console.log("Formatted Date", date);
-  //console.log(crafter);
-
   const STATUS_CHOICES: { [key: string]: string } = {
     ordered: "ordered",
     inProgress: "in progress",
@@ -100,10 +97,8 @@ const OrderDetail = (props: any) => {
     const pingOrderer = async () => {
       if (status === "delivered" && originalStatus !== "delivered") {
         const webhookURL = String(process.env.REACT_APP_WEBHOOK_URL);
-        //console.log("WEBHOOK URL",webhookURL)
-        //console.log("ORDERER DISCORD",props.order.orderer);
+
         const message = `<@${props.order.orderer_discord}> an order has been delivered`;
-        //console.log("MESSAGE",message)
         webhookMessage(webhookURL, String(message));
       }
     };
@@ -112,17 +107,6 @@ const OrderDetail = (props: any) => {
     pingOrderer();
     setOriginalStatus(status);
   }, [status, originalStatus, props, crafter]);
-
-  //Change to UseEffect
-  /*     const handleStatusChange = async (event) => {
-      console.log("ID", props.order.id)
-      const orderRef = doc(database, "orders", props.order.id);
-      console.log("ORDERREF:",orderRef);
-      await updateDoc(orderRef,{
-        current_status:event
-      });
-      console.log("Changed!", event);
-    } */
 
   return (
     <>
