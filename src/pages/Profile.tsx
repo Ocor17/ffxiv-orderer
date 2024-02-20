@@ -5,7 +5,6 @@ function ProfilePage() {
   return (
     <div>
       <TopNavBar />
-      <h1>Profile Page</h1>
       <UserProfile />
     </div>
   );
