@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -91,7 +90,7 @@ const UserProfile = () => {
   return (
     <>
       <Form {...form}>
-        <form className="space-y-8">
+        <form className="ml-4 space-y-8 min-w-fit max-w-fit">
           <FormField
             control={form.control}
             name="username"
@@ -105,10 +104,7 @@ const UserProfile = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name. It can be your real name or
-                  a pseudonym. You can only change this once every 30 days.
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -126,10 +122,7 @@ const UserProfile = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name. It can be your real name or
-                  a pseudonym. You can only change this once every 30 days.
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -147,10 +140,7 @@ const UserProfile = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name. It can be your real name or
-                  a pseudonym. You can only change this once every 30 days.
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -168,10 +158,7 @@ const UserProfile = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name. It can be your real name or
-                  a pseudonym. You can only change this once every 30 days.
-                </FormDescription>
+
                 <FormMessage />
               </FormItem>
             )}
