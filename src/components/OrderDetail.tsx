@@ -114,7 +114,7 @@ const OrderDetail = (props: any) => {
         <h2></h2>
         {props.order ? (
           <div className="flex mb-10">
-            <Card className="min-w-fit max-w-fit mx-left bg-white shadow-md rounded-lg overflow-hidden mr-1  ">
+            <Card className="min-w-fit max-w-fit mx-left  shadow-md rounded-lg overflow-hidden mr-1  ">
               <CardHeader>
                 <CardTitle>Order Information</CardTitle>
               </CardHeader>
@@ -153,7 +153,7 @@ const OrderDetail = (props: any) => {
               </CardContent>
             </Card>
             <div className="max-content">
-              <Card className="max-w-prose text-wrap bg-white shadow-md rounded-lg  w-full mr-1">
+              <Card className="max-w-prose text-wrap  shadow-md rounded-lg  w-full mr-1">
                 <CardHeader>
                   <CardTitle>Order Details</CardTitle>
                 </CardHeader>

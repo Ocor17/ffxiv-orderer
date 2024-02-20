@@ -2,7 +2,7 @@ import { addUser, checkDiscordCode } from "../Firestore";
 import { auth } from "../../Firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import "../../css/SignIn.css";
+//import "../../css/SignIn.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -84,7 +84,7 @@ const SignUp = () => {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-black"
+                    className=""
                     placeholder="Azem@example.com"
                     {...field}
                   />
@@ -101,7 +101,7 @@ const SignUp = () => {
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-black"
+                    className=""
                     type="password"
                     placeholder="password123"
                     {...field}
@@ -137,7 +137,7 @@ const SignUp = () => {
                 <FormLabel>Discord Code</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-black"
+                    className=""
                     type="string"
                     placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                     {...field}

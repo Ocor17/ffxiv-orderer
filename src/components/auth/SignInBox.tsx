@@ -101,7 +101,7 @@ const SignIn = () => {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                      className="text-black"
+                      className=""
                       placeholder="Azem@example.com"
                       {...field}
                     />
@@ -118,7 +118,7 @@ const SignIn = () => {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
-                      className="text-black"
+                      className=""
                       type="password"
                       placeholder="password123"
                       {...field}

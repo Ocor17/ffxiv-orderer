@@ -70,7 +70,7 @@
   }
 }
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border;
   }
@@ -78,13 +78,11 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-}
+} */
 
 /* Global Styles */
 body {
   font-family: "Noto Sans JP", sans-serif; /* Use Noto Sans Japanese font */
-  background-color: #121212;
-  color: #ffffff;
 }
 
 .body-style {

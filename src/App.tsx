@@ -15,6 +15,7 @@ import SignUp from "./pages/SignUp.tsx";
 import Forgot from "./pages/Forgot.tsx";
 import { getUserAuthExists } from "./components/Firestore";
 import ProfilePage from "./pages/Profile.tsx";
+import { ThemeProvider } from "./components/theme-provider.tsx";
 
 //reevaluate flow of this file now that create context can pass auth state
 
@@ -59,55 +60,57 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <>
-      <head>
-        <title>FFxiv inventory</title>
-      </head>
-      <div>
-        <BrowserRouter>
-          <Routes>
-            <Route
-              index
-              element={
-                <RequireAuth>
-                  <HomePage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/home"
-              element={
-                <RequireAuth>
-                  <HomePage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/orders/:orderId"
-              element={
-                <RequireAuth>
-                  <OrderDetailPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <RequireAuth>
-                  <ProfilePage />
-                </RequireAuth>
-              }
-            />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/forgot" element={<Forgot />} />
-            <Route path="*" element={<ErrorPage />} />
-            {/*
+      <ThemeProvider>
+        <head>
+          <title>FFxiv inventory</title>
+        </head>
+        <div>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                index
+                element={
+                  <RequireAuth>
+                    <HomePage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/home"
+                element={
+                  <RequireAuth>
+                    <HomePage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/orders/:orderId"
+                element={
+                  <RequireAuth>
+                    <OrderDetailPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <RequireAuth>
+                    <ProfilePage />
+                  </RequireAuth>
+                }
+              />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/forgot" element={<Forgot />} />
+              <Route path="*" element={<ErrorPage />} />
+              {/*
     <Route path="/profile" element={<ProfilePage/>} />
     <Route path="/admin" element={<Admin/>} />
     */}
-          </Routes>
-        </BrowserRouter>
-      </div>
+            </Routes>
+          </BrowserRouter>
+        </div>
+      </ThemeProvider>
     </>
   );
 }
