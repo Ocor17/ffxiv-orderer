@@ -31,5 +31,3 @@ const OrderDetailPage = () => {
 };
 
 export default OrderDetailPage;
-
-//<OrderDetail orderId={orderId}/>

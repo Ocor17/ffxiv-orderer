@@ -14,6 +14,7 @@ import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import Forgot from "./pages/Forgot.tsx";
 import { getUserAuthExists } from "./components/Firestore";
+import ProfilePage from "./pages/Profile.tsx";
 
 //reevaluate flow of this file now that create context can pass auth state
 
@@ -85,6 +86,14 @@ function App() {
               element={
                 <RequireAuth>
                   <OrderDetailPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <RequireAuth>
+                  <ProfilePage />
                 </RequireAuth>
               }
             />

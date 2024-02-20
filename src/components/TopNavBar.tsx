@@ -39,6 +39,16 @@ const TopNavBar = ({ state }: any) => {
               Home
             </Link>
           </li>
+          <li>
+            <Link
+              className="navItem"
+              to="/profile"
+              state={state}
+              onClick={() => navigate("/profile")}
+            >
+              Profile
+            </Link>
+          </li>
           <li className="logout">
             <button className="navItem" onClick={usersignOut}>
               Logout
