@@ -99,6 +99,7 @@ const UserProfile = () => {
                 <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input
+                    className="disabled:opacity-80 font-bold "
                     disabled={true}
                     placeholder={values?.discord_name ?? ""}
                     {...field}
@@ -117,6 +118,7 @@ const UserProfile = () => {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
+                    className="disabled:opacity-80 font-bold"
                     disabled={true}
                     placeholder={values?.email ?? ""}
                     {...field}
@@ -135,6 +137,7 @@ const UserProfile = () => {
                 <FormLabel>Role</FormLabel>
                 <FormControl>
                   <Input
+                    className="disabled:opacity-80 font-bold"
                     disabled={true}
                     placeholder={values?.role ?? ""}
                     {...field}
@@ -153,6 +156,7 @@ const UserProfile = () => {
                 <FormLabel>Active</FormLabel>
                 <FormControl>
                   <Input
+                    className="disabled:opacity-80 font-bold"
                     disabled={true}
                     placeholder={values?.active.toString() ?? ""}
                     {...field}

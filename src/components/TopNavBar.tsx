@@ -29,21 +29,10 @@ const TopNavBar = ({ state }: any) => {
               Home
             </Link>
           </li>
-          {/*           <li>
-            <Link
-              className="navItem"
-              to="/profile"
-              state={state}
-              onClick={() => navigate("/profile")}
-            >
-              Profile
-            </Link>
-          </li> */}
-          <li className="logout">
-            {/*             <button className="navItem" onClick={usersignOut}>
-              Logout
-            </button> */}
-            <ModeToggle />
+          <li className="logout mr-5">
+            <div className="mr-5">
+              <ModeToggle />
+            </div>
             <UserNav />
           </li>
         </ul>
