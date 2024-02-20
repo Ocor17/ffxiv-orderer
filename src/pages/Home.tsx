@@ -1,5 +1,6 @@
 import TopNavBar from "../components/TopNavBar";
 import OrderList from "../components/OrderList";
+import "../../app/globals.css";
 
 function HomePage() {
   return (

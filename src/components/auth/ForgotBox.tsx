@@ -65,7 +65,7 @@ const Forgot = () => {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-black"
+                    className=""
                     placeholder="Azem@example.com"
                     {...field}
                   />

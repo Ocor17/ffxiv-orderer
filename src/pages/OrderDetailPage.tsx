@@ -16,9 +16,7 @@ const OrderDetailPage = () => {
       <br />
       <h1 className="body-style">
         <Link to="/home" state={{ current_user: user }}>
-          <Button className="bg-white text-black hover:bg-blue-800 hover:text-white">
-            Back
-          </Button>
+          <Button className=" hover:bg-blue-800 hover:text-white">Back</Button>
         </Link>
       </h1>
       <br />
