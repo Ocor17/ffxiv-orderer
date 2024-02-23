@@ -16,6 +16,7 @@ import {
   setPersistence,
   User,
   browserLocalPersistence,
+  signOut,
 } from "firebase/auth";
 import { UUID } from "crypto";
 
@@ -82,7 +83,7 @@ export async function addUser(auth_id: string, discordCode: string) {
 export async function checkDiscordCode(discordCode: string) {
   const userQuery = query(
     collection(database, USER_COLLECTION),
-    where("discordCode", "==", discordCode)
+    where("registrationID", "==", discordCode)
   );
   try {
     const userSnapshot = await getDocs(userQuery);
@@ -149,17 +150,51 @@ export const loginUser = (email: string, password: string) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-export const registerUser = (
+/**
+ * Use to register users to the site.
+ * Checks if the user has a valid discord code and registers them if they do
+ *
+ * @param email - User's email to sign up
+ * @param password - User's password
+ * @param confirm_password - Confirmation of User's password
+ * @param discordCode - Code given by discord bot to use to register
+ * @returns a boolean with the confirmation a user was created or not.
+ */
+
+export const registerUser = async (
   email: string,
   password: string,
-  confirm_password: string
+  confirm_password: string,
+  discordCode: string
 ) => {
-  if (password !== confirm_password) {
-    alert("Passwords do not match");
-    return;
+  console.log("discord code", await checkDiscordCode(discordCode));
+  if (await checkDiscordCode(discordCode)) {
+    console.log("User Found");
+    if (password === confirm_password) {
+      const currentAuth = getAuth();
+
+      createUserWithEmailAndPassword(currentAuth, email, password)
+        .then(async (userCredential) => {
+          console.log(userCredential);
+          await addUser(userCredential.user.uid, discordCode);
+          alert("Sign Up Successful");
+          //we sign out to avoid issue where storage for the discord name  isn't being set because of auto redirect.
+          signOut(currentAuth);
+          return true;
+        })
+        .catch((error) => {
+          alert(error);
+          return false;
+        });
+    } else {
+      alert("Passwords do not match");
+      return false;
+    }
+  } else {
+    console.log("discordCode", discordCode);
+    alert("invalid discord code");
+    return false;
   }
-  const auth = getAuth();
-  return createUserWithEmailAndPassword(auth, email, password);
 };
 
 export const startAuthListener = (callback: (arg0: User | null) => void) => {

@@ -25,7 +25,12 @@ reset password button
 */
 
 const user = async () => {
-  return await getUser(getUserAuth()?.uid);
+  const userAuth = getUserAuth();
+  if (userAuth === null) {
+    return null;
+  }
+
+  return await getUser(userAuth.uid);
 };
 
 const authUserEmail = () => {

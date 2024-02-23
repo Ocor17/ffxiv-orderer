@@ -1,6 +1,4 @@
-import { addUser, checkDiscordCode } from "../Firestore";
-import { auth } from "../../Firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { registerUser } from "../Firestore";
 import { Link, useNavigate } from "react-router-dom";
 //import "../../css/SignIn.css";
 import { z } from "zod";
@@ -51,7 +49,11 @@ const SignUp = () => {
     const passwordReenter = values.passwordReenter;
     const discordCode = values.discordCode;
 
-    if (await checkDiscordCode(discordCode)) {
+    if (await registerUser(username, password, passwordReenter, discordCode)) {
+      navigate("/signin", { replace: true });
+    }
+
+    /*     if (await checkDiscordCode(discordCode)) {
       if (password === passwordReenter) {
         createUserWithEmailAndPassword(auth, username, password)
           .then(async (userCredential) => {
@@ -59,14 +61,17 @@ const SignUp = () => {
             await addUser(userCredential.user.uid, discordCode);
             alert("Sign Up Successful");
             navigate("/signin", { replace: true });
+            return true;
           })
           .catch((error) => {
             console.log(error);
+            return false
           });
       }
     } else {
       alert("Invalid Discord Code");
-    }
+      return false
+    } */
   }
 
   return (
@@ -119,7 +124,7 @@ const SignUp = () => {
                 <FormLabel>Reenter Password</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-black"
+                    className=""
                     type="password"
                     placeholder="password123"
                     {...field}
