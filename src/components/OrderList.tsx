@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getOrders } from "./Firestore";
+import { Order, getOrders } from "./Firestore";
 import {
   Table,
   TableBody,
@@ -11,10 +11,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+/**
+ * OrderList
+ *
+ * Displays a list of orders retrieved from Firestore.
+ *
+ * @returns JSX.Element
+ *
+ */
 const OrderList = () => {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   // Fetch orders from Firestore
 

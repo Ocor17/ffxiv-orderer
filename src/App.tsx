@@ -18,7 +18,7 @@ import ProfilePage from "./pages/Profile.tsx";
 import { ThemeProvider } from "./components/theme-provider.tsx";
 
 //reevaluate flow of this file now that create context can pass auth state
-
+//function checks users auth status and redirects to signin if not authenticated
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const [loading, setLoading] = useState(true);

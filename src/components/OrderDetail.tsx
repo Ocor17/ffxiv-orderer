@@ -13,7 +13,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+type webhookSource = string | URL | Request;
+
 //TODO Revisit this to check it it's safe to use with component
+//Formats a potential link to make it a clickable hyperlink
 const formatTextWithLinks = (text: string) => {
   return (
     <Linkify
@@ -38,10 +41,18 @@ const formatTextWithLinks = (text: string) => {
 };
 
 //TODO reflect crafter update on page in realtime
+
+/**
+ * Takes the selected order from Orderlist and displays it in a card.
+ * The user has the ablity to use the select component to change the status of the order.
+ *
+ * @param props - contains the order object from Orderlist
+ * @returns JSX.Element - the order detail card
+ */
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const OrderDetail = (props: any) => {
-  //console.log("PROPS:", props);
-
+  console.log(props);
   const date = new Date(props.order.date).toDateString();
   const [status, setStatus] = useState(props.order.current_status);
   const [crafter, setCrafter] = useState(props.order.crafter);
@@ -50,10 +61,12 @@ const OrderDetail = (props: any) => {
     props.order.current_status
   );
 
-  const webhookMessage = async (
-    webhookURL: string | URL | Request,
-    message: string
-  ) => {
+  /**
+   * Commuicates with discord's webhook to send a message to the orderer
+   * @param  webhookURL - the webhook url given from Discord. can be a string or URL
+   * @param  message - the message to be sent to the orderer
+   */
+  const webhookMessage = async (webhookURL: webhookSource, message: string) => {
     try {
       const response = await fetch(webhookURL, {
         method: "POST",
@@ -82,6 +95,12 @@ const OrderDetail = (props: any) => {
 
   //Add checks so Crafter doesn't get overwritten if another crafter is already working
   useEffect(() => {
+    /**
+     * Updates the order status in the database while also updating the crafter if the status is ordered.
+     *
+     * @returns void
+     *
+     */
     const updateOrder = async () => {
       if (status === "ordered") {
         setCrafter("");
@@ -94,6 +113,12 @@ const OrderDetail = (props: any) => {
       });
     };
 
+    /**
+     * Pings the orderer if the order is delivered if it it is not initially delivered and sends a discord message that will ping the orderer.
+     *
+     * @returns void
+     *
+     */
     const pingOrderer = async () => {
       if (status === "delivered" && originalStatus !== "delivered") {
         const webhookURL = String(process.env.REACT_APP_WEBHOOK_URL);
@@ -110,7 +135,7 @@ const OrderDetail = (props: any) => {
 
   return (
     <>
-      <div>
+      <div className="ml-10">
         <h2></h2>
         {props.order ? (
           <div className="flex mb-10">

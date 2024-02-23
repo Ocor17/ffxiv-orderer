@@ -1,11 +1,11 @@
 import {
-  addDoc,
   collection,
   getDocs,
   orderBy,
   query,
   setDoc,
   where,
+  Timestamp,
 } from "firebase/firestore";
 import { database } from "../Firebase";
 import {
@@ -14,14 +14,36 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   setPersistence,
-  browserSessionPersistence,
   User,
+  browserLocalPersistence,
 } from "firebase/auth";
 import { UUID } from "crypto";
 
 const ORDER_COLLECTION = "orders";
 const USER_COLLECTION = "users";
-export function addOrder(
+
+export interface Order {
+  date: string | number | Date;
+  id: string;
+  crafter: string;
+  current_status: string;
+  details: string;
+  order_date: Timestamp;
+  orderer: string;
+  oderer_discord: string;
+}
+
+export interface Crafter {
+  active: boolean;
+  auth_id: string;
+  created: Timestamp;
+  discord_id: string;
+  discord_name: string;
+  registrationID: UUID;
+  role: string;
+}
+
+/* export function addOrder(
   uid: UUID,
   crafter: string,
   details: string,
@@ -39,7 +61,7 @@ export function addOrder(
     oderer_discord,
     status,
   });
-}
+} */
 
 export async function addUser(auth_id: string, discordCode: string) {
   if (!checkDiscordCode(discordCode)) {
@@ -54,8 +76,6 @@ export async function addUser(auth_id: string, discordCode: string) {
   const querySnapshot = await getDocs(q);
 
   setDoc(querySnapshot.docs[0].ref, { auth_id: auth_id }, { merge: true });
-
-  //addDoc(collection(database,USER_COLLECTION),{active:false,auth_id,discordCode});
 }
 
 //discordCode is the registration code given.
@@ -80,7 +100,8 @@ export async function checkDiscordCode(discordCode: string) {
   }
 }
 
-export async function getUser(auth_id: unknown) {
+//Function gets the user associated with the auth user
+export async function getUser(auth_id: string) {
   const userQuery = query(
     collection(database, USER_COLLECTION),
     where("auth_id", "==", auth_id)
@@ -109,7 +130,8 @@ export async function getOrders() {
   const querySnapshot = await getDocs(orders);
   const allOrders = [];
   for (const documentSnapshot of querySnapshot.docs) {
-    const order = documentSnapshot.data();
+    const order = documentSnapshot.data() as Order;
+
     await allOrders.push({
       ...order,
       date: order["order_date"].toDate(),
@@ -122,7 +144,8 @@ export async function getOrders() {
 
 export const loginUser = (email: string, password: string) => {
   const auth = getAuth();
-  setPersistence(auth, browserSessionPersistence);
+  // changed from session storage to allow opening of new tabs without resigining in.
+  setPersistence(auth, browserLocalPersistence);
   return signInWithEmailAndPassword(auth, email, password);
 };
 

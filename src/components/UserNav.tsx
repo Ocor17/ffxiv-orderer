@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
-import { getUserAuth, logoutUser } from "./components/Firestore";
+import { getUserAuth, logoutUser } from "./Firestore";
 import { useNavigate, Link } from "react-router-dom";
 
 const UserNav = () => {
