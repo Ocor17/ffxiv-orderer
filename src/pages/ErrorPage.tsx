@@ -1,10 +1,15 @@
-import TopNavBar from "../components/TopNavBar";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 function ErrorPage() {
   return (
     <>
-      <TopNavBar state={undefined} />
-      <h2>Error 404: Not Found</h2>
+      <h2 className="text-3xl font-bold text-center">Error 404: Not Found</h2>
+      <div className="flex justify-center ">
+        <Link className="mt-5 items-center font-bold text-xl" to="/">
+          <Button>Go Home</Button>
+        </Link>
+      </div>
     </>
   );
 }

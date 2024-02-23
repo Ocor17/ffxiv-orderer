@@ -104,7 +104,6 @@ function App() {
               <Route path="/forgot" element={<Forgot />} />
               <Route path="*" element={<ErrorPage />} />
               {/*
-    <Route path="/profile" element={<ProfilePage/>} />
     <Route path="/admin" element={<Admin/>} />
     */}
             </Routes>

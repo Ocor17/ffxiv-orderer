@@ -52,7 +52,7 @@ const formatTextWithLinks = (text: string) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const OrderDetail = (props: any) => {
-  console.log(props);
+  //console.log(props);
   const date = new Date(props.order.date).toDateString();
   const [status, setStatus] = useState(props.order.current_status);
   const [crafter, setCrafter] = useState(props.order.crafter);
