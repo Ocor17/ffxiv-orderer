@@ -14,7 +14,7 @@ const OrderDetailPage = () => {
     <>
       <TopNavBar state={undefined} />
       <br />
-      <h1 className="body-style">
+      <h1 className="body-style ml-10">
         <Link to="/home" state={{ current_user: user }}>
           <Button className=" hover:bg-blue-800 hover:text-white">Back</Button>
         </Link>

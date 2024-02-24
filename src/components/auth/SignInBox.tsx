@@ -36,8 +36,10 @@ const SignIn = () => {
     if (auth.currentUser) {
       console.log("User is already authenticated. Redirecting to home.");
 
+      const uid: string = auth.currentUser.uid;
+
       const fetchData = async () => {
-        const active_user = await getUser(auth?.currentUser?.uid);
+        const active_user = await getUser(uid);
         console.log("Active User", active_user?.displayName);
 
         if (active_user?.active === true) {
@@ -65,7 +67,15 @@ const SignIn = () => {
 
     loginUser(username, password)
       .then(async () => {
-        const active_user = await getUser(auth?.currentUser?.uid);
+        const current_auth = auth.currentUser;
+
+        if (current_auth == null) {
+          return;
+        }
+
+        const uid: string = current_auth.uid;
+
+        const active_user = await getUser(uid);
         sessionStorage.setItem("discord_name", active_user?.discord_name);
         if (active_user?.active !== true) {
           sessionStorage.clear();

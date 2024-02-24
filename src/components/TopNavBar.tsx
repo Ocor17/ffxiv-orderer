@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../css/TopNavBar.css";
 import FCCrest from "../media/FCCrest.png";
-import UserNav from "@/UserNav";
+import UserNav from "@/components/UserNav";
 import { ModeToggle } from "./mode-toggle";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

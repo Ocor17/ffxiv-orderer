@@ -25,7 +25,12 @@ reset password button
 */
 
 const user = async () => {
-  return await getUser(getUserAuth()?.uid);
+  const userAuth = getUserAuth();
+  if (userAuth === null) {
+    return null;
+  }
+
+  return await getUser(userAuth.uid);
 };
 
 const authUserEmail = () => {
@@ -60,7 +65,7 @@ const UserProfile = () => {
       try {
         const userData = await user();
         if (userData !== null) {
-          console.log("User Data:", userData);
+          //console.log("User Data:", userData);
           const fullData = { ...userData, email: authUserEmail() };
           setValues(fullData);
         }
@@ -72,7 +77,7 @@ const UserProfile = () => {
     fetchUser();
   }, []);
 
-  console.log("Values USESTATE:", values);
+  //console.log("Values USESTATE:", values);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(formSchema),
@@ -84,7 +89,7 @@ const UserProfile = () => {
     },
   });
 
-  console.log("Form", form);
+  //console.log("Form", form);
 
   //Using shadcn for for potential future where these may be editable
   return (

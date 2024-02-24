@@ -1,11 +1,11 @@
 import {
-  addDoc,
   collection,
   getDocs,
   orderBy,
   query,
   setDoc,
   where,
+  Timestamp,
 } from "firebase/firestore";
 import { database } from "../Firebase";
 import {
@@ -14,14 +14,37 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   setPersistence,
-  browserSessionPersistence,
   User,
+  browserLocalPersistence,
+  signOut,
 } from "firebase/auth";
 import { UUID } from "crypto";
 
 const ORDER_COLLECTION = "orders";
 const USER_COLLECTION = "users";
-export function addOrder(
+
+export interface Order {
+  date: string | number | Date;
+  id: string;
+  crafter: string;
+  current_status: string;
+  details: string;
+  order_date: Timestamp;
+  orderer: string;
+  oderer_discord: string;
+}
+
+export interface Crafter {
+  active: boolean;
+  auth_id: string;
+  created: Timestamp;
+  discord_id: string;
+  discord_name: string;
+  registrationID: UUID;
+  role: string;
+}
+
+/* export function addOrder(
   uid: UUID,
   crafter: string,
   details: string,
@@ -39,7 +62,7 @@ export function addOrder(
     oderer_discord,
     status,
   });
-}
+} */
 
 export async function addUser(auth_id: string, discordCode: string) {
   if (!checkDiscordCode(discordCode)) {
@@ -54,15 +77,13 @@ export async function addUser(auth_id: string, discordCode: string) {
   const querySnapshot = await getDocs(q);
 
   setDoc(querySnapshot.docs[0].ref, { auth_id: auth_id }, { merge: true });
-
-  //addDoc(collection(database,USER_COLLECTION),{active:false,auth_id,discordCode});
 }
 
 //discordCode is the registration code given.
 export async function checkDiscordCode(discordCode: string) {
   const userQuery = query(
     collection(database, USER_COLLECTION),
-    where("discordCode", "==", discordCode)
+    where("registrationID", "==", discordCode)
   );
   try {
     const userSnapshot = await getDocs(userQuery);
@@ -80,7 +101,8 @@ export async function checkDiscordCode(discordCode: string) {
   }
 }
 
-export async function getUser(auth_id: unknown) {
+//Function gets the user associated with the auth user
+export async function getUser(auth_id: string) {
   const userQuery = query(
     collection(database, USER_COLLECTION),
     where("auth_id", "==", auth_id)
@@ -109,7 +131,8 @@ export async function getOrders() {
   const querySnapshot = await getDocs(orders);
   const allOrders = [];
   for (const documentSnapshot of querySnapshot.docs) {
-    const order = documentSnapshot.data();
+    const order = documentSnapshot.data() as Order;
+
     await allOrders.push({
       ...order,
       date: order["order_date"].toDate(),
@@ -122,21 +145,56 @@ export async function getOrders() {
 
 export const loginUser = (email: string, password: string) => {
   const auth = getAuth();
-  setPersistence(auth, browserSessionPersistence);
+  // changed from session storage to allow opening of new tabs without resigining in.
+  setPersistence(auth, browserLocalPersistence);
   return signInWithEmailAndPassword(auth, email, password);
 };
 
-export const registerUser = (
+/**
+ * Use to register users to the site.
+ * Checks if the user has a valid discord code and registers them if they do
+ *
+ * @param email - User's email to sign up
+ * @param password - User's password
+ * @param confirm_password - Confirmation of User's password
+ * @param discordCode - Code given by discord bot to use to register
+ * @returns a boolean with the confirmation a user was created or not.
+ */
+
+export const registerUser = async (
   email: string,
   password: string,
-  confirm_password: string
+  confirm_password: string,
+  discordCode: string
 ) => {
-  if (password !== confirm_password) {
-    alert("Passwords do not match");
-    return;
+  console.log("discord code", await checkDiscordCode(discordCode));
+  if (await checkDiscordCode(discordCode)) {
+    console.log("User Found");
+    if (password === confirm_password) {
+      const currentAuth = getAuth();
+
+      createUserWithEmailAndPassword(currentAuth, email, password)
+        .then(async (userCredential) => {
+          console.log(userCredential);
+          await addUser(userCredential.user.uid, discordCode);
+          alert("Sign Up Successful");
+          //we sign out to avoid issue where storage for the discord name  isn't being set because of auto redirect.
+          signOut(currentAuth);
+          return true;
+        })
+        .catch((error) => {
+          alert(error);
+          return false;
+        });
+    } else {
+      alert("Passwords do not match");
+      return false;
+    }
+  } else {
+    console.log("discordCode", discordCode);
+    alert("invalid discord code");
+    return false;
   }
-  const auth = getAuth();
-  return createUserWithEmailAndPassword(auth, email, password);
 };
 
 export const startAuthListener = (callback: (arg0: User | null) => void) => {
