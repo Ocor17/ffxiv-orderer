@@ -31,12 +31,15 @@ import { Timestamp } from "firebase/firestore";
  */
 
 //TODO decide to get rid of orders or results since they kinda are the same thing
+//Really hacky workaround to get pagination behavior correct because Firebase is weird.
 const OrderList = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [orders, setOrders] = useState<Order[]>([]);
   const [result, setResult] = useState<Order[]>([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [next, setNext] = useState(true);
   const [time, setTime] = useState<Timestamp>();
   // Fetch orders from Firestore
 
@@ -44,10 +47,9 @@ const OrderList = () => {
     const fetchData = async () => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setResult(await getOrders(time));
+        setResult(await getOrders(time, next));
         //result = await getOrders(result[result.length - 1]["order_date"]);
         setOrders(result);
-        console.log(result[result.length - 1]["order_date"]);
 
         //setUser(location.state.current_user || {});
       } catch (error) {
@@ -55,7 +57,7 @@ const OrderList = () => {
       }
     };
     fetchData();
-  }, [time]);
+  }, [time, next]);
 
   return (
     <>
@@ -97,7 +99,9 @@ const OrderList = () => {
               onClick={() => {
                 if (page > 1) {
                   setPage(page - 1);
+                  setPageCount(pageCount - 1);
                   //navigate(`/home/${page}`, { state: { page } });
+                  setNext(false);
                   setTime(result[0]["order_date"]);
                 }
               }}
@@ -116,6 +120,8 @@ const OrderList = () => {
               className="hover:cursor-pointer"
               onClick={() => {
                 setPage(page + 1);
+                setPageCount(pageCount + 1);
+                setNext(true);
                 setTime(result[result.length - 1]["order_date"]);
                 //navigate(`/home/${page}`, { state: { page } });
 

@@ -8,6 +8,8 @@ import {
   limit as FirestoreLimit,
   Timestamp,
   startAt,
+  endBefore,
+  limitToLast,
 } from "firebase/firestore";
 import { database } from "../Firebase";
 import {
@@ -136,21 +138,36 @@ export async function getUser(auth_id: string) {
 /**
  * gets all orders from the datavbase and returns them as an array
  *
+ * @param lastOrderDate - the order date to orient the function
+ * @param next - specifies whether we're going forwards or backwards for pagination
+ * @param limit - the number of items we want to see per page
+ *
  * @returns an array of orders
  *
  */
 
-//TODO add pagination
+//TODO fix weirdness with pagination going backwards. Issue with 'limitToLast'
 export async function getOrders(
   lastOrderDate: Timestamp = new Timestamp(0, 0),
+  next: boolean = true,
   limit: number = 5
 ) {
-  const orders = query(
-    collection(database, ORDER_COLLECTION),
-    orderBy("order_date", "asc"),
-    startAt(lastOrderDate),
-    FirestoreLimit(limit)
-  );
+  let orders;
+  if (next) {
+    orders = query(
+      collection(database, ORDER_COLLECTION),
+      orderBy("order_date", "asc"),
+      startAt(lastOrderDate),
+      FirestoreLimit(limit)
+    );
+  } else {
+    orders = query(
+      collection(database, ORDER_COLLECTION),
+      orderBy("order_date", "asc"),
+      endBefore(lastOrderDate),
+      limitToLast(limit)
+    );
+  }
 
   const querySnapshot = await getDocs(orders);
 
