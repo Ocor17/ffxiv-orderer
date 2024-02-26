@@ -5,7 +5,9 @@ import {
   query,
   setDoc,
   where,
+  limit as FirestoreLimit,
   Timestamp,
+  startAt,
 } from "firebase/firestore";
 import { database } from "../Firebase";
 import {
@@ -101,6 +103,14 @@ export async function checkDiscordCode(discordCode: string) {
   }
 }
 
+/**
+ * Gets a user from the user collection that hold profiles data, not to be confused with
+ * the authentication.
+ *
+ * @param auth_id - Auth id from the authentication to link with the user collection
+ * @returns userData or null if user doesn't exist
+ */
+
 //Function gets the user associated with the auth user
 export async function getUser(auth_id: string) {
   const userQuery = query(
@@ -123,16 +133,42 @@ export async function getUser(auth_id: string) {
   }
 }
 
-export async function getOrders() {
+/**
+ * gets all orders from the datavbase and returns them as an array
+ *
+ * @returns an array of orders
+ *
+ */
+
+//TODO add pagination
+export async function getOrders(
+  lastOrderDate: Timestamp = new Timestamp(0, 0),
+  limit: number = 5
+) {
   const orders = query(
     collection(database, ORDER_COLLECTION),
-    orderBy("order_date", "asc")
+    orderBy("order_date", "asc"),
+    startAt(lastOrderDate),
+    FirestoreLimit(limit)
   );
+
   const querySnapshot = await getDocs(orders);
+
+  /*   const lastOrder = querySnapshot.docs[querySnapshot.docs.length - 1];
+  console.log("last order", lastOrder.id);
+
+  const next = query(
+    collection(database, ORDER_COLLECTION),
+    orderBy("order_date", "asc"),
+    startAfter(lastOrder),
+    FirestoreLimit(limit)
+  ); */
+
   const allOrders = [];
   for (const documentSnapshot of querySnapshot.docs) {
     const order = documentSnapshot.data() as Order;
 
+    //review why there is an await here
     await allOrders.push({
       ...order,
       date: order["order_date"].toDate(),

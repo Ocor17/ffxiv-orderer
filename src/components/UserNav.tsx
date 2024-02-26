@@ -55,11 +55,16 @@ const UserNav = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <Link to="/profile" onClick={() => navigate("/profile")}>
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem className="hover:cursor-pointer">
+              Profile
+            </DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => usersignOut()}>
+        <DropdownMenuItem
+          className="hover:cursor-pointer"
+          onClick={() => usersignOut()}
+        >
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

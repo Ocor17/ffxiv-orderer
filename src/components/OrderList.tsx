@@ -10,6 +10,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Timestamp } from "firebase/firestore";
 
 /**
  * OrderList
@@ -19,27 +29,33 @@ import {
  * @returns JSX.Element
  *
  */
+
+//TODO decide to get rid of orders or results since they kinda are the same thing
 const OrderList = () => {
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [orders, setOrders] = useState<Order[]>([]);
-
+  const [result, setResult] = useState<Order[]>([]);
+  const [time, setTime] = useState<Timestamp>();
   // Fetch orders from Firestore
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result = await getOrders();
-
+        setResult(await getOrders(time));
+        //result = await getOrders(result[result.length - 1]["order_date"]);
         setOrders(result);
+        console.log(result[result.length - 1]["order_date"]);
+
         //setUser(location.state.current_user || {});
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [time]);
 
   return (
     <>
@@ -72,6 +88,43 @@ const OrderList = () => {
           </TableBody>
         ))}
       </Table>
+
+      <Pagination className="mt-4">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              className="hover:cursor-pointer"
+              onClick={() => {
+                if (page > 1) {
+                  setPage(page - 1);
+                  //navigate(`/home/${page}`, { state: { page } });
+                  setTime(result[0]["order_date"]);
+                }
+              }}
+            />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink className="hover:cursor-pointer">
+              {page}
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis className="hover:cursor-pointer" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              className="hover:cursor-pointer"
+              onClick={() => {
+                setPage(page + 1);
+                setTime(result[result.length - 1]["order_date"]);
+                //navigate(`/home/${page}`, { state: { page } });
+
+                //navigate(`/home/${page}`, { state: { page } });
+              }}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </>
   );
 };
