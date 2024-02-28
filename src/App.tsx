@@ -84,6 +84,14 @@ function App() {
                 }
               />
               <Route
+                path="/home/:page"
+                element={
+                  <RequireAuth>
+                    <HomePage />
+                  </RequireAuth>
+                }
+              />
+              <Route
                 path="/orders/:orderId"
                 element={
                   <RequireAuth>

@@ -10,6 +10,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Timestamp } from "firebase/firestore";
 
 /**
  * OrderList
@@ -19,27 +35,55 @@ import {
  * @returns JSX.Element
  *
  */
+
+//TODO decide to get rid of orders or results since they kinda are the same thing
+//Really hacky workaround to get pagination behavior correct because Firebase is weird.
 const OrderList = () => {
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [page, setPage] = useState(1);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [next, setNext] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [limit, setLimit] = useState(5);
 
+  const [time, setTime] = useState<Timestamp>(new Timestamp(0, 0));
+  //const [previousResult, setPreviousResult] = useState<Order>();
   // Fetch orders from Firestore
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result = await getOrders();
+        //inital value to start the process.
 
-        setOrders(result);
-        //setUser(location.state.current_user || {});
+        const data = await getOrders(time, next, limit);
+
+        setOrders(data);
+        //setResult(data);
+
+        //console.log(result);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [time, page, next, limit]);
+
+  //TODO clean if-else statements to be like handleNextPage
+  const handlePreviousPage = async () => {
+    if (page > 1) {
+      setPage(page - 1);
+      setNext(false);
+      setTime(orders[0]?.order_date);
+    } else return;
+  };
+
+  const handleNextPage = async () => {
+    if (orders.length < limit) return;
+
+    setNext(true);
+    setPage(page + 1);
+    setTime(orders[orders.length - 1]?.order_date);
+  };
 
   return (
     <>
@@ -54,24 +98,81 @@ const OrderList = () => {
             <TableHead className="text-right">Crafter</TableHead>
           </TableRow>
         </TableHeader>
-        {orders.map((order) => (
-          <TableBody>
-            <TableRow
-              className="hover:cursor-pointer"
-              key={order.id}
-              onClick={() => {
-                navigate(`/orders/${order.id}`, { state: { order } });
-              }}
-            >
-              <TableCell className="font-medium">{order.orderer}</TableCell>
-              <TableCell>{order.current_status}</TableCell>
-              <TableCell>{new Date(order.date).toDateString()}</TableCell>
-              <TableCell>{order.details.substring(0, 40)}...</TableCell>
-              <TableCell className="text-right">{order.crafter}</TableCell>
-            </TableRow>
-          </TableBody>
-        ))}
+        {
+          //use of slice to display up to limit but keep the last element for pagination
+          orders
+            .slice(0, -1)
+            .map(({ id, orderer, current_status, date, details, crafter }) => (
+              <TableBody key={id}>
+                <TableRow
+                  className="hover:cursor-pointer"
+                  key={id}
+                  onClick={() => {
+                    navigate(`/orders/${id}`, {
+                      state: {
+                        order: {
+                          id,
+                          orderer,
+                          current_status,
+                          date,
+                          details,
+                          crafter,
+                        },
+                      },
+                    });
+                  }}
+                >
+                  <TableCell className="font-medium">{orderer}</TableCell>
+                  <TableCell>{current_status}</TableCell>
+                  <TableCell>{new Date(date).toDateString()}</TableCell>
+                  <TableCell>{details.substring(0, 40)}...</TableCell>
+                  <TableCell className="text-right">{crafter}</TableCell>
+                </TableRow>
+              </TableBody>
+            ))
+        }
       </Table>
+
+      <Pagination className=" mx-auto flex justify-center items-center align-middle">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              className="hover:cursor-pointer"
+              onClick={handlePreviousPage}
+            />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink className="hover:cursor-pointer">
+              {page}
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext
+              className="hover:cursor-pointer"
+              onClick={handleNextPage}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+      <div className=" mt-4 mx-auto flex justify-center items-center align-middle size-fit">
+        <Select
+          onValueChange={(value) => {
+            setLimit(Number(value));
+            setPage(1);
+            setNext(true);
+            setTime(new Timestamp(0, 0));
+          }}
+        >
+          <SelectTrigger className="">
+            <SelectValue placeholder="Results per page" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="5">5</SelectItem>
+            <SelectItem value="10">10</SelectItem>
+            <SelectItem value="25">25</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
     </>
   );
 };
