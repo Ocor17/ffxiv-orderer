@@ -8,8 +8,8 @@ import {
   limit as FirestoreLimit,
   Timestamp,
   startAt,
-  endBefore,
   limitToLast,
+  endAt,
 } from "firebase/firestore";
 import { database } from "../Firebase";
 import {
@@ -140,6 +140,7 @@ export async function getUser(auth_id: string) {
  *
  * @param lastOrderDate - the order date to orient the function
  * @param next - specifies whether we're going forwards or backwards for pagination
+ * @param previousOrder - marker for going backwards in pagination by using the last order of the previous page
  * @param limit - the number of items we want to see per page
  *
  * @returns an array of orders
@@ -153,6 +154,12 @@ export async function getOrders(
   limit: number = 5
 ) {
   let orders;
+  limit += 1;
+
+  console.log("lastOrderDate", lastOrderDate);
+  console.log("next", next);
+  console.log("limit", limit);
+
   if (next) {
     orders = query(
       collection(database, ORDER_COLLECTION),
@@ -164,22 +171,12 @@ export async function getOrders(
     orders = query(
       collection(database, ORDER_COLLECTION),
       orderBy("order_date", "asc"),
-      endBefore(lastOrderDate),
+      endAt(lastOrderDate),
       limitToLast(limit)
     );
   }
 
   const querySnapshot = await getDocs(orders);
-
-  /*   const lastOrder = querySnapshot.docs[querySnapshot.docs.length - 1];
-  console.log("last order", lastOrder.id);
-
-  const next = query(
-    collection(database, ORDER_COLLECTION),
-    orderBy("order_date", "asc"),
-    startAfter(lastOrder),
-    FirestoreLimit(limit)
-  ); */
 
   const allOrders = [];
   for (const documentSnapshot of querySnapshot.docs) {
@@ -192,6 +189,8 @@ export async function getOrders(
       id: documentSnapshot.id,
     });
   }
+
+  console.log("all orders", allOrders);
 
   return allOrders;
 }

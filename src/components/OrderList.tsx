@@ -35,29 +35,49 @@ import { Timestamp } from "firebase/firestore";
 const OrderList = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [orders, setOrders] = useState<Order[]>([]);
-  const [result, setResult] = useState<Order[]>([]);
-  const [pageCount, setPageCount] = useState(0);
   const [next, setNext] = useState(true);
-  const [time, setTime] = useState<Timestamp>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [limit, setLimit] = useState(5);
+
+  const [time, setTime] = useState<Timestamp>(new Timestamp(0, 0));
+  //const [previousResult, setPreviousResult] = useState<Order>();
   // Fetch orders from Firestore
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setResult(await getOrders(time, next));
-        //result = await getOrders(result[result.length - 1]["order_date"]);
-        setOrders(result);
+        //inital value to start the process.
 
-        //setUser(location.state.current_user || {});
+        const data = await getOrders(time, next);
+
+        setOrders(data);
+        //setResult(data);
+
+        //console.log(result);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
     fetchData();
-  }, [time, next]);
+  }, [time, page, next]);
+
+  //TODO clean if-else statements to be like handleNextPage
+  const handlePreviousPage = async () => {
+    if (page > 1) {
+      setPage(page - 1);
+      setNext(false);
+      setTime(orders[0]?.order_date);
+    } else return;
+  };
+
+  const handleNextPage = async () => {
+    if (orders.length < limit) return;
+
+    setNext(true);
+    setPage(page + 1);
+    setTime(orders[orders.length - 1]?.order_date);
+  };
 
   return (
     <>
@@ -72,23 +92,39 @@ const OrderList = () => {
             <TableHead className="text-right">Crafter</TableHead>
           </TableRow>
         </TableHeader>
-        {orders.map((order) => (
-          <TableBody>
-            <TableRow
-              className="hover:cursor-pointer"
-              key={order.id}
-              onClick={() => {
-                navigate(`/orders/${order.id}`, { state: { order } });
-              }}
-            >
-              <TableCell className="font-medium">{order.orderer}</TableCell>
-              <TableCell>{order.current_status}</TableCell>
-              <TableCell>{new Date(order.date).toDateString()}</TableCell>
-              <TableCell>{order.details.substring(0, 40)}...</TableCell>
-              <TableCell className="text-right">{order.crafter}</TableCell>
-            </TableRow>
-          </TableBody>
-        ))}
+        {
+          //use of slice to display up to limit but keep the last element for pagination
+          orders
+            .slice(0, -1)
+            .map(({ id, orderer, current_status, date, details, crafter }) => (
+              <TableBody key={id}>
+                <TableRow
+                  className="hover:cursor-pointer"
+                  key={id}
+                  onClick={() => {
+                    navigate(`/orders/${id}`, {
+                      state: {
+                        order: {
+                          id,
+                          orderer,
+                          current_status,
+                          date,
+                          details,
+                          crafter,
+                        },
+                      },
+                    });
+                  }}
+                >
+                  <TableCell className="font-medium">{orderer}</TableCell>
+                  <TableCell>{current_status}</TableCell>
+                  <TableCell>{new Date(date).toDateString()}</TableCell>
+                  <TableCell>{details.substring(0, 40)}...</TableCell>
+                  <TableCell className="text-right">{crafter}</TableCell>
+                </TableRow>
+              </TableBody>
+            ))
+        }
       </Table>
 
       <Pagination className="mt-4">
@@ -96,15 +132,7 @@ const OrderList = () => {
           <PaginationItem>
             <PaginationPrevious
               className="hover:cursor-pointer"
-              onClick={() => {
-                if (page > 1) {
-                  setPage(page - 1);
-                  setPageCount(pageCount - 1);
-                  //navigate(`/home/${page}`, { state: { page } });
-                  setNext(false);
-                  setTime(result[0]["order_date"]);
-                }
-              }}
+              onClick={handlePreviousPage}
             />
           </PaginationItem>
           <PaginationItem>
@@ -118,15 +146,7 @@ const OrderList = () => {
           <PaginationItem>
             <PaginationNext
               className="hover:cursor-pointer"
-              onClick={() => {
-                setPage(page + 1);
-                setPageCount(pageCount + 1);
-                setNext(true);
-                setTime(result[result.length - 1]["order_date"]);
-                //navigate(`/home/${page}`, { state: { page } });
-
-                //navigate(`/home/${page}`, { state: { page } });
-              }}
+              onClick={handleNextPage}
             />
           </PaginationItem>
         </PaginationContent>
