@@ -13,12 +13,18 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Timestamp } from "firebase/firestore";
 
 /**
@@ -49,7 +55,7 @@ const OrderList = () => {
       try {
         //inital value to start the process.
 
-        const data = await getOrders(time, next);
+        const data = await getOrders(time, next, limit);
 
         setOrders(data);
         //setResult(data);
@@ -60,7 +66,7 @@ const OrderList = () => {
       }
     };
     fetchData();
-  }, [time, page, next]);
+  }, [time, page, next, limit]);
 
   //TODO clean if-else statements to be like handleNextPage
   const handlePreviousPage = async () => {
@@ -127,7 +133,7 @@ const OrderList = () => {
         }
       </Table>
 
-      <Pagination className="mt-4">
+      <Pagination className=" mx-auto flex justify-center items-center align-middle">
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
@@ -141,9 +147,6 @@ const OrderList = () => {
             </PaginationLink>
           </PaginationItem>
           <PaginationItem>
-            <PaginationEllipsis className="hover:cursor-pointer" />
-          </PaginationItem>
-          <PaginationItem>
             <PaginationNext
               className="hover:cursor-pointer"
               onClick={handleNextPage}
@@ -151,6 +154,25 @@ const OrderList = () => {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
+      <div className=" mt-4 mx-auto flex justify-center items-center align-middle size-fit">
+        <Select
+          onValueChange={(value) => {
+            setLimit(Number(value));
+            setPage(1);
+            setNext(true);
+            setTime(new Timestamp(0, 0));
+          }}
+        >
+          <SelectTrigger className="">
+            <SelectValue placeholder="Results per page" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="5">5</SelectItem>
+            <SelectItem value="10">10</SelectItem>
+            <SelectItem value="25">25</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
     </>
   );
 };
