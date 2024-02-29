@@ -140,20 +140,19 @@ export async function getUser(auth_id: string) {
  *
  * @param lastOrderDate - the order date to orient the function
  * @param next - specifies whether we're going forwards or backwards for pagination
- * @param previousOrder - marker for going backwards in pagination by using the last order of the previous page
  * @param limit - the number of items we want to see per page
  *
  * @returns an array of orders
  *
  */
 
-//TODO fix weirdness with pagination going backwards. Issue with 'limitToLast'
 export async function getOrders(
   lastOrderDate: Timestamp = new Timestamp(0, 0),
   next: boolean = true,
   limit: number = 5
 ) {
   let orders;
+  //limit adds one to stop overlap for the data displayed due to how startAt works
   limit += 1;
 
   console.log("lastOrderDate", lastOrderDate);
@@ -182,15 +181,14 @@ export async function getOrders(
   for (const documentSnapshot of querySnapshot.docs) {
     const order = documentSnapshot.data() as Order;
 
-    //review why there is an await here
-    await allOrders.push({
+    allOrders.push({
       ...order,
       date: order["order_date"].toDate(),
       id: documentSnapshot.id,
     });
   }
 
-  console.log("all orders", allOrders);
+  //console.log("all orders", allOrders);
 
   return allOrders;
 }

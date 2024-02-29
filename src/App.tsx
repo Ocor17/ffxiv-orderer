@@ -7,7 +7,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import OrderDetailPage from "./pages/OrderDetailPage.tsx";
-import HomePage from "./pages/Home.tsx";
 import "../app/globals.css";
 import ErrorPage from "./pages/ErrorPage.tsx";
 import SignIn from "./pages/SignIn.tsx";
@@ -16,6 +15,8 @@ import Forgot from "./pages/Forgot.tsx";
 import { getUserAuthExists } from "./components/Firestore";
 import ProfilePage from "./pages/Profile.tsx";
 import { ThemeProvider } from "./components/theme-provider.tsx";
+import LandingPage from "./pages/LandingPage.tsx";
+import OrderListPage from "./pages/OrderListPage.tsx";
 
 //reevaluate flow of this file now that create context can pass auth state
 //function checks users auth status and redirects to signin if not authenticated
@@ -54,7 +55,7 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
   }
 
   // Redirect to sign-in page if not authenticated
-  return <Navigate to="/signin" state={{ from: location }} replace />;
+  return <Navigate to="/" state={{ from: location }} replace />;
 }
 
 function App() {
@@ -67,27 +68,20 @@ function App() {
         <div>
           <BrowserRouter>
             <Routes>
+              <Route index element={<LandingPage />} />
               <Route
-                index
+                path="/orderlist"
                 element={
                   <RequireAuth>
-                    <HomePage />
+                    <OrderListPage />
                   </RequireAuth>
                 }
               />
               <Route
-                path="/home"
+                path="/orderlist/:page"
                 element={
                   <RequireAuth>
-                    <HomePage />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path="/home/:page"
-                element={
-                  <RequireAuth>
-                    <HomePage />
+                    <OrderListPage />
                   </RequireAuth>
                 }
               />

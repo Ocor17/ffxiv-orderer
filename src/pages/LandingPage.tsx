@@ -1,5 +1,5 @@
 import TopNavBar from "../components/TopNavBar";
-import OrderList from "../components/OrderList";
+import Landing from "../components/Landing";
 import "../../app/globals.css";
 
 function HomePage() {
@@ -7,7 +7,7 @@ function HomePage() {
     <>
       <TopNavBar state={undefined} />
       <div className="body-style">
-        <OrderList />
+        <Landing />
       </div>
     </>
   );

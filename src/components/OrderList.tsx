@@ -36,20 +36,16 @@ import { Timestamp } from "firebase/firestore";
  *
  */
 
-//TODO decide to get rid of orders or results since they kinda are the same thing
 //Really hacky workaround to get pagination behavior correct because Firebase is weird.
 const OrderList = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [orders, setOrders] = useState<Order[]>([]);
   const [next, setNext] = useState(true);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [limit, setLimit] = useState(5);
-
   const [time, setTime] = useState<Timestamp>(new Timestamp(0, 0));
-  //const [previousResult, setPreviousResult] = useState<Order>();
-  // Fetch orders from Firestore
 
+  // Fetch orders from Firestore
   useEffect(() => {
     const fetchData = async () => {
       try {
