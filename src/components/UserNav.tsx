@@ -23,7 +23,7 @@ const UserNav = () => {
         sessionStorage.clear();
         console.log("sign out success");
 
-        navigate("/signin", { replace: true });
+        navigate("/", { replace: true });
       })
       .catch((error) => console.log(error));
   };

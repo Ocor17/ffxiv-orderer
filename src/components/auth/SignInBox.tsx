@@ -43,7 +43,7 @@ const SignIn = () => {
         console.log("Active User", active_user?.displayName);
 
         if (active_user?.active === true) {
-          navigate("/", {
+          navigate("/orderlist", {
             replace: true,
             state: { current_user: active_user.discord_name },
           });
@@ -83,7 +83,7 @@ const SignIn = () => {
           return;
         }
         console.log("User is authenticated. Redirecting to home.");
-        navigate("/", {
+        navigate("/orderlist", {
           replace: true,
           state: { current_user: active_user?.discord_name },
         });
