@@ -74,7 +74,7 @@ const OrderList = () => {
   };
 
   const handleNextPage = async () => {
-    if (orders.length < limit) return;
+    if (orders.length <= limit) return;
 
     setNext(true);
     setPage(page + 1);
@@ -96,8 +96,9 @@ const OrderList = () => {
         </TableHeader>
         {
           //use of slice to display up to limit but keep the last element for pagination
+
           orders
-            .slice(0, -1)
+            .slice(0, orders.length <= limit ? orders.length : -1)
             .map(({ id, orderer, current_status, date, details, crafter }) => (
               <TableBody key={id}>
                 <TableRow
