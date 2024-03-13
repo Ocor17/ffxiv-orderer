@@ -134,8 +134,11 @@ const OrderList = () => {
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              className="hover:cursor-pointer"
+              className={
+                page <= 1 ? "disabled opacity-55" : "hover:cursor-pointer"
+              }
               onClick={handlePreviousPage}
+              aria-disabled={page <= 1}
             />
           </PaginationItem>
           <PaginationItem>
@@ -145,8 +148,13 @@ const OrderList = () => {
           </PaginationItem>
           <PaginationItem>
             <PaginationNext
-              className="hover:cursor-pointer"
+              className={
+                orders.length <= limit
+                  ? "disabled opacity-55"
+                  : "hover:cursor-pointer"
+              }
               onClick={handleNextPage}
+              aria-disabled={orders.length <= limit}
             />
           </PaginationItem>
         </PaginationContent>
