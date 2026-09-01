@@ -35,7 +35,7 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
         if (userExists) {
           setAuthenticated(true);
         }
-      } catch (error) {
+      } catch {
         setAuthenticated(false);
       } finally {
         setLoading(false);
